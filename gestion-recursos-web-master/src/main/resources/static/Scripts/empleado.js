@@ -3,10 +3,12 @@ let patternPath = new RegExp('\/Crear');
 let estructuraOrganizacional = document.querySelector("select[id='codestructuraorganizacional']")
 let gerenciaSelect = document.getElementById('gerencias');
 const patternEstructura = /(gerent|coordinac)/g
+let constantValue = 180;
 $(function () {
 
     let diaactual = new Date();
     diaactual = dayjs(diaactual);
+    cargarConstante();
 
     $("form .ddl-persona").change(function () {
         var elemento = $(this);
@@ -254,6 +256,36 @@ function cargarEstructuraxGerencia(codGerencia) {
         console.error(err)
         $.LoadingOverlay("hide");
     })
+}
+
+function cargarConstante() {
+    $.ajax({
+        url: '/CostoEmpleado/traerVariableCalFactorPunto',
+        type: 'GET',
+        data: null,
+        processData: false,
+        contentType: "application/json",
+    }).done(function (data, textStatus, jqXHR) {
+        if (data !== undefined && data !== null && data.data !== undefined && data.data !== null) {
+            constantValue = data.data ? data.data : constantValue;
+        } else {
+            console.log('No se obtuvo el valor de properties');
+        }
+    }).fail(function (jqXHR, textStatus, errorThrown) {
+        console.log('No se obtuvo el valor de properties');
+    });
+}
+
+function calulatePointMonthPointFactor() {
+    var boxPointCost = $("#costoPunto").val();
+    var boxMonthCost = $("#costoMes").val();
+    console.log('costoPunto' + boxPointCost);
+    console.log('costoMes' + boxMonthCost);
+    if (boxPointCost > 0 && boxMonthCost > 0) {
+        var pointMont = ((Math.round(boxMonthCost / boxPointCost) / 10) * 10).toFixed(1);
+        $("#puntoMes").val(pointMont);
+        $("#factorPunto").val(Math.round((pointMont / constantValue) * 10000) / 10000);
+    }
 }
 
 

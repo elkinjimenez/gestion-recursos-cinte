@@ -8,6 +8,7 @@ import javax.persistence.Query;
 
 import com.claro.gestionrecursosapi.base.model.RespuestaBase;
 import com.claro.gestionrecursosapi.base.model.RespuestaCustomizada;
+import com.claro.gestionrecursosapi.costoempleado.domain.CostoEmpleadoService;
 import com.claro.gestionrecursosapi.costoempleado.entity.CostoEmpleadoEntity;
 import com.claro.gestionrecursosapi.costoempleado.entity.CostoEmpleadoVU;
 import com.claro.gestionrecursosapi.costoempleado.repository.ICostoEmpleadoRepository;
@@ -43,6 +44,9 @@ public class CostoEmpleadoController {
 	IHallazgoRepository hallazgoRepository;
 	@Autowired
 	private HallazgoService hallazgoService;
+
+	@Autowired
+	private CostoEmpleadoService costoEmpleadoService;
 
 	/*
 	 * @GetMapping("/{id}")
@@ -174,6 +178,22 @@ public class CostoEmpleadoController {
 		} catch (Exception e) {
 			// System.out.println("session alter: " +
 			// ExceptionUtils.getStackTraceString(e));
+		}
+	}
+
+	@GetMapping("/traerValorProperties/{name}")
+	public ResponseEntity<RespuestaBase> traerVariableCalFactorPunto(@PathVariable String name) {
+		try {
+			RespuestaCustomizada<Integer> respuesta = new RespuestaCustomizada<>();
+			Integer constanteCalFactorPunto = costoEmpleadoService.traerVariableCalFactorPunto(name);
+			respuesta.setCodigoEstatus(HttpStatus.OK.value());
+			respuesta.setMensaje("Valor consultado");
+			respuesta.setData(constanteCalFactorPunto);
+			return new ResponseEntity<RespuestaBase>(respuesta, HttpStatus.OK);
+		} catch (Exception e) {
+			System.out.println("println: " + ExceptionUtils.getStackTraceString(e));
+			RespuestaBase respuestaBase = new RespuestaBase(HttpStatus.NOT_FOUND.value(), e.getMessage());
+			return new ResponseEntity<RespuestaBase>(respuestaBase, HttpStatus.NOT_FOUND);
 		}
 	}
 

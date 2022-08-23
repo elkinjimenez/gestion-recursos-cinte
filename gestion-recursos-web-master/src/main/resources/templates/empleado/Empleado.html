@@ -280,29 +280,29 @@
                         <div class="form-group">
                             <label>Costo punto</label>
                             <input type="hidden" th:name="idCostoEmpleado" th:value="${costoEmpleado.id}" />
-                            <input type="number" required class="form-control" th:name="costoPunto"
-                                th:value="${costoEmpleado.costoPunto}" />
+                            <input type="number" required class="form-control" th:name="costoPunto" id="costoPunto"
+                                th:value="${costoEmpleado.costoPunto}" onfocusout="calulatePointMonthPointFactor()" />
                         </div>
                     </div>
                     <div class="col-md-3 costoEmpleado">
                         <div class="form-group">
                             <label>Costo mes</label>
-                            <input type="number" required class="form-control" th:name="costoMes"
-                                th:value="${costoEmpleado.costoMes}" />
+                            <input type="number" required class="form-control" th:name="costoMes" id="costoMes"
+                                th:value="${costoEmpleado.costoMes}"  onfocusout="calulatePointMonthPointFactor()" />
                         </div>
                     </div>
                     <div class="col-md-3 costoEmpleado">
                         <div class="form-group">
                             <label>Puntos mes</label>
-                            <input type="number" required class="form-control" th:name="puntoMes"
-                                th:value="${costoEmpleado.puntosMes}" />
+                            <input type="number" required class="form-control" th:name="puntoMes" id="puntoMes"
+                                th:value="${costoEmpleado.puntosMes}" disabled  />
                         </div>
                     </div>
                     <div class="col-md-3 costoEmpleado">
                         <div class="form-group">
                             <label>Factor punto</label>
-                            <input type="number" required class="form-control" th:name="factorPunto"
-                                th:value="${costoEmpleado.factorPunto}" max="20000" />
+                            <input type="number" required class="form-control" th:name="factorPunto" id="factorPunto"
+                                th:value="${costoEmpleado.factorPunto}" max="20000" disabled  />
                         </div>
                     </div>
                     <div class="col-md-3 costoEmpleado">

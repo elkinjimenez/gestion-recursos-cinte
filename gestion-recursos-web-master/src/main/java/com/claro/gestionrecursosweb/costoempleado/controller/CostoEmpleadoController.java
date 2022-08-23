@@ -2,10 +2,13 @@ package com.claro.gestionrecursosweb.costoempleado.controller;
 
 import com.claro.gestionrecursosweb.base.controller.BaseController;
 import com.claro.gestionrecursosweb.base.domain.ApiService;
+import com.claro.gestionrecursosweb.base.model.RespuestaCustomizada;
 import com.claro.gestionrecursosweb.costoempleado.dto.CostoEmpleadoDto;
 import com.claro.gestionrecursosweb.costoempleado.dto.CostoEmpleadoVUDto;
 import com.claro.gestionrecursosweb.novedad.dto.NovedadDto;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,7 +16,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpServletRequest;
+
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Controller
 @RequestMapping("/CostoEmpleado")
@@ -57,6 +63,24 @@ public class CostoEmpleadoController extends BaseController {
         modelo.addAttribute("costoEmpleado", new CostoEmpleadoDto());*/
 
         return "hallazgorespuesta/HallazgoResp";
+    }
+
+    @GetMapping("/traerVariableCalFactorPunto")
+    public ResponseEntity<?> cargarConstante(Model modelo, @RequestParam(required = false) String cla,
+            HttpServletRequest request) {
+        Map<String, Object> response = new HashMap<>();
+        try {
+            String url = "/traerValorProperties/calFactorPunto";
+            serviceCostoEmp.setapiservicename(dominio_costoempleado);
+            ResponseEntity<RespuestaCustomizada<Integer>> responseEntity = null;
+            responseEntity = (ResponseEntity<RespuestaCustomizada<Integer>>) serviceCostoEmp
+                    .findAllByParamApiDeserializacion(url);
+            return responseEntity;
+        } catch (Exception e) {
+            response.put("mensaje", "Error al consultar información del reporte");
+            response.put("error", e.getMessage().concat(": ").concat(e.getMessage()));
+            return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
     /*@GetMapping("/Filtro")
