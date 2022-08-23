@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html layout:decorate="~{Layout}">
+	<head>
+		<title>Recursos</title>
+	</head>
+	<body>
+		<div layout:fragment="content">
+		
+			<div th:insert="MensajesFormulario.html :: mensajes_formulario"> </div>
+		
+		    <form class="validate" action="/Usuario" th:attr="action=${cl_formulario_url}" th:object="${modelo}" method="post">
+		    	<div class="row">
+			    	<input type="hidden" th:field="*{id}" />
+			    	<div class="col-md-3">
+			    		<div class="form-group">
+			    			<label>Tipo documento</label>
+			    			<select class="form-control" required th:field="*{codtipodocumento}" data-rule-min="1" data-msg-min="Debe seleccionar una opción">
+			    				<option value="0">Seleccione...</option>
+			    				<option th:each="item : ${tipodocumentos}" th:value="${item.id}" th:text="${item.descripcion}"></option>
+			    			</select>
+			    		</div>
+			    	</div>
+			    	<div class="col-md-3">
+			    		<div class="form-group">
+			    			<label>Número <span class="d-md-none d-xl-inline">de</span> documento</label>
+			    			<input type="text" class="form-control" required th:field="*{numerodocumento}" maxlength="15"/>
+			    		</div>
+			    	</div>
+			    	<div class="col-md-3">
+			    		<div class="form-group">
+			    			<label>Primer nombre</label>
+			    			<input type="text" class="form-control" required th:field="*{nombre1}" maxlength="50"/>
+			    		</div>
+			    	</div>
+			    	<div class="col-md-3">
+			    		<div class="form-group">
+			    			<label>Segundo nombre</label>
+			    			<input type="text" class="form-control" th:field="*{nombre2}" maxlength="50"/>
+			    		</div>
+			    	</div>
+			    	<div class="col-md-3">
+			    		<div class="form-group">
+			    			<label>Primer apellido</label>
+			    			<input type="text" class="form-control" required th:field="*{apellido1}" maxlength="50"/>
+			    		</div>
+			    	</div>
+			    	<div class="col-md-3">
+			    		<div class="form-group">
+			    			<label>Segundo apellido</label>
+			    			<input type="text" class="form-control" th:field="*{apellido2}" maxlength="50"/>
+			    		</div>
+			    	</div>
+			    	<div class="col-md-3">
+			    		<div class="form-group">
+			    			<label>Teléfono</label>
+			    			<input type="text" class="form-control" th:field="*{telefono}" maxlength="50"/>
+			    		</div>
+			    	</div>
+			    	<div class="col-md-3">
+			    		<div class="form-group">
+			    			<label>Celular</label>
+			    			<input type="text" class="form-control" rquired th:field="*{celular}" maxlength="50"/>
+			    		</div>
+			    	</div>
+			    	<div class="col-md-3">
+			    		<div class="form-group">
+			    			<label>Correo electrónico</label>
+			    			<input type="email" class="form-control" th:field="*{correo}" data-rule-email="true" maxlength="200"/>
+			    		</div>
+			    	</div>
+			    	<div class="col-md-6">
+			    		<div class="form-group">
+			    			<label>Dirección de residencia</label>
+			    			<input type="text" class="form-control" th:field="*{direccionresidencia}" maxlength="500"/>
+			    		</div>
+			    	</div>
+			    	<div class="col-md-3">
+			    		<div class="form-group">
+			    			<label>Género</label>
+			    			<select class="form-control" required th:field="*{genero}" data-rule-notEqual="0" data-msg-notEqual="Debe seleccionar una opción">
+			    				<option value="0">Seleccione...</option>
+			    				<option value="F">Femenino</option>
+			    				<option value="M">Masculino</option>    				
+			    			</select>
+			    		</div>
+			    	</div>
+			    	<div class="col-md-3">
+			    		<div class="form-group">
+			    			<label>Fecha nacimiento</label>
+			    			<input type="text" class="form-control cl-date-picker" th:id="fechanacimiento" th:name="fechanacimiento" autocomplete="off" th:value="${modelo.fechanacimiento}?${#dates.format(modelo.fechanacimiento, 'dd/MM/yyyy')}:''" maxlength="10"/>
+			    		</div>
+			    	</div>
+			    	<div class="col-md-6">
+			    		<div class="form-group">
+			    			<label>EPS</label>
+			    			<select class="form-control cl-select-picker ddl-terceroeps required" data-live-search="true" th:field="*{codterceroeps}">
+			    				<option value="">Seleccione...</option>
+			    				<option th:each="item : ${terceros}" th:value="${item.id}" th:text="${item.nombre}"></option>
+		    				</select>
+			    		</div>
+			    	</div>
+			    	<div class="col-md-3">
+			    		<div class="form-group">
+			    			<label>Ubicación</label>
+			    			<input type="text" class="form-control" th:field="*{ubicacion}" maxlength="50" />
+			    		</div>
+			    	</div>
+			    	<div class="col-md-3">
+			    		<div class="form-group">
+			    			<label>Grupo sanguíneo</label>
+			    			<select class="form-control" th:field="*{gruposanguineo}">
+			    				<option value="">Seleccione...</option>
+			    				<option value="O+">O+</option>
+								<option value="O-">O-</option>
+								<option value="A−">A−</option>	
+								<option value="A+">A+</option>			
+								<option value="B−">B−</option>	
+								<option value="B+">B+</option>
+								<option value="AB−">AB−</option>
+								<option value="AB+">AB+</option>
+			    			</select>
+			    		</div>
+			    	</div>
+			    	<div class="col-md-6">
+			    		<div class="form-group">
+			    			<label>Nombre contacto de emergencia</label>
+			    			<input type="text" class="form-control" th:field="*{contactoemergencianombre}" maxlength="50" />
+			    		</div>
+			    	</div>
+			    	<div class="col-md-3">
+			    		<div class="form-group">
+			    			<label>Teléfono contacto de emergencia</label>
+			    			<input type="text" class="form-control" th:field="*{contactoemergenciatelefono}" maxlength="50" />
+			    		</div>
+			    	</div>
+			    	<div class="col-12">
+			    		<div class="form-group text-center">
+			    			<div class="separador-30"></div>
+			    			<input type="submit" class="btn btn-info" value="Guardar"/>
+			    		</div>
+			    	</div>
+		    	</div>
+		    </form>
+		</div>
+	</body>
+</html>

@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html layout:decorate="~{Layout}">
+<head>
+<title>Tarea tipo</title>
+</head>
+<body>
+	<th:block layout:fragment="estilos">
+		<link href="/Complementos/DataTables/datatables.min.css"
+			rel="stylesheet" />
+	</th:block>
+	<th:block layout:fragment="scripts">
+		<script type="text/javascript"
+			src="/Complementos/DataTables/datatables.min.js" rel="stylesheet"></script>
+		<script type="text/javascript" src="/Scripts/cl-tablas.js"></script>
+	</th:block>
+	<div layout:fragment="content">
+		<div class="table-responsive">
+			<table
+				class="table table-striped table-sm table-bordered table-hover cl-tabla">
+				<thead class="thead-light text-center">
+					<tr>
+						<th>Ver</th>
+						<th>Nombre</th>
+						<th>Descripción</th>
+						<th>Jerarquia</th>
+						<th>Color</th>
+						<th>Fecha creación</th>
+						<th>Fecha modificación</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr th:each="item : ${modelo}">
+						<td align="center">
+							<a href="#" th:attr="href='/Tareatipo/Editar/'+${item.id}" class="btn btn-warning">Editar</a>
+						</td>
+						<td><span th:text="${item.nombre}">Title</span></td>
+						<td><span th:text="${item.descripcion}">Title</span></td>
+						<td><span th:text="${item.jerarquia}">Title</span></td>
+						<td><span th:text="${item.color}">Title</span></td>
+						<td><span th:text="${item.fechaCreacionString}">Title</span></td>
+						<td><span th:text="${item.fechaModificacionString}">Title</span></td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</div>
+</body>
+</html>

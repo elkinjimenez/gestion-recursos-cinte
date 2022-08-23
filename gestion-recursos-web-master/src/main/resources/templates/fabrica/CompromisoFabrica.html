@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html layout:decorate="~{Layout}">
+<head>
+    <title>Compromisos Fábrica</title>
+</head>
+<body>
+<div layout:fragment="content">
+
+    <div th:insert="MensajesFormulario.html :: mensajes_formulario"></div>
+    <div th:if="${error != null}" class="alert alert-danger">
+        <div th:text="${error}"></div>
+    </div>
+
+    <form class="validate" action="/Crear" th:attr="action=${cl_formulario_url}" th:object="${modelo}" method="post">
+        <div class="row" th:if="${datos_cargados}">
+            <input type="hidden" th:field="*{Id}"/>
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label>Proyecto</label>
+                    <select class="form-control cl-select-picker" data-live-search="true" required
+                            th:field="*{idCodProyecto}" data-rule-min="1" data-msg-min="Debe seleccionar una opción">
+                        <option value="0">Seleccione...</option>
+                        <option style="width:50px" th:each="item : ${proyectos}" th:value="${item.id}"
+                                th:text="${item.nombre}"></option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label>Perfil</label>
+                    <select class="form-control cl-select-picker" data-live-search="true" required
+                            th:field="*{idCodPerfil}" data-rule-min="1" data-msg-min="Debe seleccionar una opción">
+                        <option value="0">Seleccione...</option>
+                        <option th:each="item : ${perfiles}" th:value="${item.id}" th:text="${item.nombre}"></option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label>Nivel Perfil</label>
+                    <select class="form-control cl-select-picker" data-live-search="true" required
+                            th:field="*{idCodPerfiLNivel}" data-rule-min="1" data-msg-min="Debe seleccionar una opción">
+                        <option value="0">Seleccione...</option>
+                        <option th:each="item : ${perfilniveles}" th:value="${item.id}"
+                                th:text="${item.nombre}"></option>
+                    </select>
+                </div>
+
+            </div>
+
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label>Perfil Tipo</label>
+                    <select class="form-control cl-select-picker" data-live-search="true" required
+                            th:field="*{idCodPerfilTipo}" data-rule-min="1" data-msg-min="Debe seleccionar una opción">
+                        <option value="0">Seleccione...</option>
+                        <option th:each="item : ${perfiltipos}" th:value="${item.id}" th:text="${item.nombre}"></option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label>Proveedor</label>
+                    <select class="form-control cl-select-picker" data-live-search="true" required
+                            th:field="*{idCodProveedor}" data-rule-min="1" data-msg-min="Debe seleccionar una opción">
+                        <option value="0">Seleccione...</option>
+                        <option th:each="item : ${proveedores}" th:value="${item.id}" th:text="${item.nombre}"></option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label>Linea Producto</label>
+                    <!-- <input class="form-control" type="text" th:field="*{lineaProducto}" maxlength="20"/> -->
+                    <select class="form-control cl-select-picker" data-live-search="true"
+                            th:required="${modelo.lineaProducto != null}" th:field="*{lineaProducto}">
+                        <option value="" th:if="${modelo.lineaProducto != null}" th:text="${modelo.lineaProducto}"
+                                class="text-error"></option>
+                        <option value="">Seleccione...</option>
+                        <option th:each="item : ${lineasProducto}" th:value="${item.nombre}"
+                                th:text="${item.valor}"></option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label>Horas HL</label>
+                    <input class="form-control" type="number" th:field="*{horasHL}" min="0"/>
+                </div>
+            </div>
+
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label>Horas LL</label>
+                    <input class="form-control" type="number" th:field="*{horasLL}" min="0"/>
+                </div>
+            </div>
+
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label>Fecha Inicio</label>
+                    <input type="text" class="form-control cl-date-picker" th:id="fechaInicio" th:name="fechaInicio"
+                           autocomplete="off"
+                           th:value="${modelo.fechaInicio}?${#dates.format(modelo.fechaInicio, 'dd/MM/yyyy')}:''"
+                           maxlength="10"/>
+                </div>
+            </div>
+
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label>Fecha Fin</label>
+                    <input type="text" class="form-control cl-date-picker" th:id="fechaFin" th:name="fechaFin"
+                           autocomplete="off"
+                           th:value="${modelo.fechaFin}?${#dates.format(modelo.fechaFin, 'dd/MM/yyyy')}:''"
+                           maxlength="10"/>
+                </div>
+            </div>
+
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label>Brief</label>
+                    <input class="form-control" type="text" th:field="*{brief}" maxlength="20"/>
+                </div>
+            </div>
+
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label>Id RLP</label>
+                    <input class="form-control" type="number" th:field="*{idRlp}" required
+                           oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                           maxlength="7" minlength="5"/>
+                </div>
+            </div>
+
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label>Fecha Inicio QA</label>
+                    <input type="text" class="form-control cl-date-picker" th:id="fechaQaInicio" th:name="fechaQaInicio"
+                           autocomplete="off"
+                           th:value="${modelo.fechaQaInicio}?${#dates.format(modelo.fechaQaInicio, 'dd/MM/yyyy')}:''"
+                           maxlength="10"/>
+                </div>
+            </div>
+
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label>Fecha Fin QA</label>
+                    <input type="text" class="form-control cl-date-picker" th:id="fechaQaFin" th:name="fechaQaFin"
+                           autocomplete="off"
+                           th:value="${modelo.fechaQaFin}?${#dates.format(modelo.fechaQaFin, 'dd/MM/yyyy')}:''"
+                           maxlength="10"/>
+                </div>
+            </div>
+
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label>Fecha Despliegue</label>
+                    <input type="text" class="form-control cl-date-picker" th:id="fechaDespliegue"
+                           th:name="fechaDespliegue" autocomplete="off"
+                           th:value="${modelo.fechaDespliegue}?${#dates.format(modelo.fechaDespliegue, 'dd/MM/yyyy')}:''"
+                           maxlength="10"/>
+                </div>
+            </div>
+
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label>Fecha Despliegue Real</label>
+                    <input type="text" class="form-control cl-date-picker" th:id="fechaDespliegueReal"
+                           th:name="fechaDespliegueReal" autocomplete="off"
+                           th:value="${modelo.fechaDespliegueReal}?${#dates.format(modelo.fechaDespliegueReal, 'dd/MM/yyyy')}:''"
+                           maxlength="10"/>
+                </div>
+            </div>
+
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label>Id Cambio</label>
+                    <input class="form-control" type="text" th:field="*{idCambio}" maxlength="20"/>
+                </div>
+            </div>
+
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label>Resultado Cambio</label>
+                    <!-- <input class="form-control" type="text" th:field="*{resultado}" maxlength="20"/> -->
+                    <select class="form-control cl-select-picker" data-live-search="true"
+                            th:required="${modelo.resultado != null}" th:field="*{resultado}">
+                        <option value="" th:if="${modelo.resultado != null}" th:text="${modelo.resultado}"
+                                class="text-error"></option>
+                        <option value="">Seleccione...</option>
+                        <option th:each="item : ${resultados}" th:value="${item.nombre}"
+                                th:text="${item.valor}"></option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label>Stopper</label>
+                    <textarea class="form-control" th:field="*{stopper}" maxlength="1000" cols="30" rows="3"></textarea>
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label>Justificación</label>
+                    <textarea class="form-control" th:field="*{justificacion}" maxlength="3000" cols="30"
+                              rows="3"></textarea>
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label>Descripción</label>
+                    <textarea class="form-control" th:field="*{descripcion}" maxlength="3000" cols="30"
+                              rows="3"></textarea>
+                </div>
+            </div>
+
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label>Fecha Presupuesto</label>
+                    <input type="text" class="form-control cl-date-picker" th:id="fechaPresupuesto"
+                           th:name="fechaPresupuesto" autocomplete="off"
+                           th:value="${modelo.fechaPresupuesto}?${#dates.format(modelo.fechaPresupuesto, 'dd/MM/yyyy')}:''"
+                           maxlength="10"/>
+                </div>
+            </div>
+
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label>Horas real</label>
+                    <input class="form-control" type="number" th:field="*{horasReal}" min="0"/>
+                </div>
+            </div>
+
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label>PM</label>
+                    <input class="form-control" type="text" th:field="*{pm}" maxlength="1000"/>
+                </div>
+            </div>
+
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label>LT</label>
+                    <input class="form-control" type="text" th:field="*{lt}" maxlength="1000"/>
+                </div>
+            </div>
+
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label>Estado</label>
+                    <!-- <input class="form-control" required type="text" th:field="*{estado}" maxlength="20"/> -->
+                    <select class="form-control cl-select-picker" data-live-search="true" required th:field="*{estado}">
+                        <option value="" th:if="${modelo.estado != null}" th:text="${modelo.estado}"
+                                class="text-error"></option>
+                        <option value="">Seleccione...</option>
+                        <option th:each="item : ${estados}" th:value="${item.nombre}" th:text="${item.valor}"></option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label>Fase</label>
+                    <input class="form-control" type="number" th:field="*{fase}" min="0"/>
+                </div>
+            </div>
+
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label>Fecha Solicitud</label>
+                    <input type="text" class="form-control cl-date-picker" th:id="fechaSolicitud"
+                           th:name="fechaSolicitud" autocomplete="off"
+                           th:value="${modelo.fechaSolicitud}?${#dates.format(modelo.fechaSolicitud, 'dd/MM/yyyy')}:''"
+                           maxlength="10"/>
+                </div>
+            </div>
+
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label>Estructura Organizacional</label>
+                    <select class="form-control cl-select-picker" data-live-search="true" th:field="*{codEstructura}"
+                            data-rule-min="1" data-msg-min="Debe seleccionar una opción">
+                        <option value="0">Seleccione...</option>
+                        <option th:each="item : ${estructurasorganizacionales}" th:value="${item.id}"
+                                th:text="${item.nombre}"></option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="col-md-12">
+                <div class="form-group">
+                    <label>Evidencia</label>
+                    <input class="form-control" type="text" th:field="*{evidencia}" maxlength="500" required/>
+                </div>
+            </div>
+
+            <div class="col-12">
+                <div class="form-group text-center">
+                    <div class="separador-30"></div>
+                    <input type="submit" class="btn btn-info" value="Guardar" id="btnGuardar"/>
+                </div>
+            </div>
+        </div>
+        <div class="row" th:if="${!datos_cargados}">
+            <div class="col-md-12">
+                <span><h3>No se cargaron los combos  del formulario </h3></span>
+            </div>
+        </div>
+    </form>
+    <script type="text/javascript">
+        function validarValor() {
+            var fvalor = document.querySelector("#valor");
+            var btnGuardar = document.querySelector("#btnGuardar");
+            var msgValor = document.querySelector("#msgValor");
+            if (fvalor.value.match("[0-9]{1,20}")) {
+                try {
+                    btnGuardar.removeAttribute("disabled");
+                    msgValor.style.display = "none";
+                } catch (error) {
+                }
+                return;
+            } else {
+                btnGuardar.setAttribute("disabled", "true");
+                msgValor.style.display = "inline";
+                return;
+            }
+        }
+    </script>
+</div>
+</body>
+</html>

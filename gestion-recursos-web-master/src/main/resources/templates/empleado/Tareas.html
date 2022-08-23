@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html layout:decorate="~{Layout}"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      >
+    <head>
+        <title>Tareas del empleado</title>
+    </head>
+    <body>
+        <th:block layout:fragment="estilos">
+            <link href="/Complementos/gantt/codebase/dhtmlxgantt.css" rel="stylesheet"></script>
+                <link href="/Estilos/gantt.css" rel="stylesheet" />
+        </th:block>
+        <th:block layout:fragment="scripts">
+            <script type="text/javascript" src="/Complementos/gantt/codebase/dhtmlxgantt.js"></script>
+            <script type="text/javascript" src="/Complementos/gantt/codebase/locale/locale_es.js"></script>
+            <script type="text/javascript" src="/Complementos/gantt/codebase/ext/dhtmlxgantt_marker.js"></script>
+            <script type="text/javascript" src="/Complementos/gantt/codebase/ext/dhtmlxgantt_tooltip.js"></script>
+
+            <script type="text/javascript" src="/Scripts/gantt-empleado.js?v=1.3"></script>
+            <script type="text/javascript" src="/Scripts/seguimiento.js?v=1.3"></script>
+        </th:block>
+
+        <div layout:fragment="content" class="cl-seccion-gantt">		
+            <div class="row">
+                <div class="col-sm-2">
+                    <div class="form-group">
+                        <input type="hidden" id="hd-fechainicio" th:value="${fechainicio}?${#dates.format(fechainicio, 'dd/MM/yyyy')}:''"/>
+                        <input type="text" id="txt-fechainicio" name="fechainicio" th:value="${fechainicio}?${#dates.format(fechainicio, 'dd/MM/yyyy')}:''" title="Fecha de inicio" class="form-control cl-date-picker" placeholder="Fecha inicio" readonly />
+                    </div>
+                </div>
+                <div class="col-sm-2">
+                    <div class="form-group">
+                        <input type="hidden" id="hd-fechafin" th:value="${fechafin}?${#dates.format(fechafin, 'dd/MM/yyyy')}:''"/>
+                        <input type="text" id="txt-fechafin" name="fechafin" th:value="${fechafin}?${#dates.format(fechafin, 'dd/MM/yyyy')}:''" title="Fecha fin" class="form-control cl-date-picker" placeholder="Fecha fin" readonly />
+                    </div>
+                </div>
+                <div class="col-sm-2">
+                    <select class="form-control" name="scale">
+                        <option value="year" selected>Escala anual</option>
+                        <option value="month">Escala mensual</option>
+                    </select>
+                </div>
+                <div class="col-sm-6">
+                    <div class="separador-10"></div>
+                    <span th:text="${horasmesactual}"></span>
+                </div>
+                <div class="col-12">
+                    <div id="cl-gantt" style='width:100%; height:75vh;'>
+
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal fade" id="cl-tarea-modal" tabindex="-1" role="dialog" aria-labelledby="cl-tarea-modal-label" aria-hidden="true">
+                <div class="modal-dialog modal-lg" role="document">
+                    <div class="modal-content">
+                        <div class="modal-footer p-1 border-top-0">
+                            <button type="button" class="btn btn-warning" data-dismiss="modal">
+                                <i class="far fa-trash-alt"></i>
+                                Cancelar
+                            </button>
+                            <button id="btn-moda-tarea-guardar" type="submit" form="cl-form-tarea" class="btn btn-success">
+                                <i class="far fa-save"></i>
+                                Guardar
+                            </button>
+                        </div>
+                        <div class="modal-body p-0 pnl-nueva-tarea">
+                            <div th:insert="tarea/_Tarea.html :: tarea_plantilla">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>		
+        </div>
+    </body>
+</html>

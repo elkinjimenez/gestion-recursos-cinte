@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html layout:decorate="~{Layout}">
+<head>
+    <title>Gerente - Coordinador - Desarrollador Celula</title>
+</head>
+<body>
+<th:block layout:fragment="estilos">
+    <link href="/Complementos/DataTables/datatables.min.css" rel="stylesheet"/>
+</th:block>
+<th:block layout:fragment="scripts">
+    <script type="text/javascript" src="/Complementos/DataTables/datatables.min.js" rel="stylesheet"></script>
+    <script type="text/javascript" src="/Scripts/cl-tablas.js"></script>
+    <script>
+        var url = window.location.pathname;
+        var idPadre = url.substring(url.lastIndexOf('/') + 1);
+        $("#crud a")[1].href = "/Estructuraorganizacional/Crear/3/"+idPadre;
+    </script>
+</th:block>
+
+<div layout:fragment="content">
+    <div class="card text-center border">
+        <div class="card-header">
+            <ul class="nav nav-tabs card-header-tabs">
+                <li class="nav-item">
+                    <a class="nav-link" href="/Estructuraorganizacional/Filtro">Gerente</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="javascript:;" onclick="javascript:history.back();">Coordinador</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link active" href="#">Desarrollador Celula</a>
+                </li>
+            </ul>
+        </div>
+        <div class="card-body">
+            <table class="table table-striped table-sm table-bordered table-hover cl-tabla">
+                <thead class="thead-light text-center">
+                <tr>
+                    <th>Acciones</th>
+                    <th>Responsable</th>
+                    <th>Nombre Estructura Organizacional</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="item : ${modelo}">
+                    <td align="center">
+                        <a href="#" th:attr="href='/Estructuraorganizacional/Editar/'+${item.id}" class="btn btn-warning">Editar</a>
+                    </td>
+                    <td>
+                        <span th:text="${item.nombreGerente}"></span>
+                    </td>
+                    <td>
+                        <span th:text="${item.nombreGerencia}"></span>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+</body>
+</html>

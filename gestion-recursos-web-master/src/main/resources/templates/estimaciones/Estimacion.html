@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html layout:decorate="~{Layout}">
+<head>
+    <title>Estimaciones</title>
+    <link rel="stylesheet" href="calendar.css"/>
+</head>
+<body>
+<div layout:fragment="content">
+
+    <div th:insert="MensajesFormulario.html :: mensajes_formulario"> </div>
+    <div th:if="${error != null}" class="alert alert-danger">
+        <div th:text="${error}"></div>
+    </div>
+<!--     <form th:action="@{/Estimaciones/Filtro}"> -->
+<!--         <div class="col-12"> -->
+<!--             <div class="form-group text-center"> -->
+<!--                 <div class="separador-30"></div> -->
+<!--                 <input style="float:right;" type="submit" class="btn btn-success" value="Ver Estimaciones"/> -->
+<!--             </div> -->
+<!--         </div> -->
+<!--     </form> -->
+
+    <form th:action="@{/}">
+        <div class="col-12">
+            <div class="form-group text-center">
+                <input style="float:left;" type="submit" class="btn btn-primary" value="Inicio"/>
+                <div class="separador-30"></div>
+                <div class="separador-30"></div>
+            </div>
+        </div>
+
+        <h1 align="center">Crear Estimación</h1>
+        <div class="separador-30"></div>
+        <div class="separador-30"></div>
+    </form>
+<!--    <form th:if="${compromisoFabrica != null}" class="validate" action="/Usuario" th:attr="action=${cl_formulario_url}" th:object="${hallazgo}" method="post">-->
+    <form class="validate" th:action="@{/Estimaciones/Crear}"  th:object="${estimaciones}" method="post">
+
+        <div class="row">
+           <input type="hidden" th:field="*{id}" />
+            <div class="col-md-8">
+                <div class="form-group">
+                    <label>Perfil:</label>
+                    <select class="form-control cl-select-picker" th:field="*{perfil}" data-live-search="true" required  data-rule-min="1" data-msg-min="Debe seleccionar una opción">
+                        <option value="0">Seleccione...</option>
+                        <option value="1">DESARROLLO ESB</option>
+                        <option value="2">DESARROLLO EAP</option>
+                        <option value="3">DESARROLLO API/MS</option>
+                        <option value="4">DESARROLLO ODI</option>
+                        <option value="5">ARQUITECTO API/MS</option>
+<!--                        <option th:each="item : ${proyectos}" th:value="${item.id}" th:text="${item.nombre}"></option>-->
+                    </select>
+                </div>
+            </div>
+
+           <!-- <div class="col-md-4">
+	    		<div class="form-group">
+	    			<label>Fecha Inicio</label>
+	    			<input type="text" class="form-control cl-date-picker" required th:id="fechaInicio" th:name="fechaInicio" th:value="*{fechaInicio}" autocomplete="off"  maxlength="20"/>
+	    		</div>
+			 </div>-->
+			 
+<!--			 <div class="col-md-4">
+                <div class="form-group">
+                    <label for="preRequisito">Pre-Requisito:</label>
+                    <input class="form-control" type="text"  id="preRequisito" name="preRequisito" th:field="*{preRequisito}" required ><br>
+                </div>
+            </div>-->
+	    	
+	    	<div class="col-md-3">
+                <div class="form-group">
+                    <label for="cantidadServicios">Cantidad de Servicios:</label>
+                    <input class="form-control" type="number"  id="cantidadServicios" name="cantidadServicios" value="cantidadServicios" th:field="*{cantidadServicios}" required ><br>
+                </div>
+            </div>
+
+            <div class="col-12">
+                <div class="form-group text-center">
+                    <div class="separador-30"></div>
+                    <input type="submit" class="btn btn-info" value="Estimar"/>
+                </div>
+                <div class="separador-30"></div>
+                <div class="separador-30"></div>
+            </div>
+
+            <div class="col-md-12">
+                <div class="form-group">
+                    <ul>
+                        <li>En caso de <strong>OSB y EAP</strong> contactar a <strong>Freddy Contreras</strong></li>
+                        <li>En caso de <strong>WhatsApp</strong> contactar a <strong>Leonardo Velasquez</strong></li>
+                        <li>En caso de <strong>Logistica Omnicanal </strong> contactar a <strong>Sebastian Méndez</strong></li>
+                        <li>En caso de <strong>Bases de Datos</strong> contactar a <strong>Omar Sanchez</strong></li>
+                    </ul>
+                </div>
+            </div>
+
+        </div>
+    </form>
+</div>
+</body>
+</html>

@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html layout:decorate="~{Layout}">
+<head>
+    <title>Estimaciones</title>
+</head>
+<body>
+    <th:block layout:fragment="estilos">
+        <link href="/Complementos/DataTables/datatables.min.css" rel="stylesheet"/>
+    </th:block>
+    <th:block layout:fragment="scripts">
+        <script type="text/javascript" src="/Complementos/DataTables/datatables.min.js" rel="stylesheet"></script>
+        <script type="text/javascript" src="/Scripts/cl-tablas.js"></script>
+        <script type="text/javascript">
+            function descargar(codProyecto) {
+                var api = $("#api").val();
+                window.open(api+"/estimaciones/descargar/"+codProyecto);
+            }
+        </script>
+    </th:block>
+    <div layout:fragment="content">
+        <div th:insert="MensajesFormulario.html :: mensajes_formulario"> </div>
+        <div th:if="${error != null}" class="alert alert-danger">
+            <div th:text="${error}"></div>
+        </div>
+
+        <div class="table-responsive">
+            <table class="table table-striped table-sm table-bordered table-hover cl-tabla">
+                <thead class="thead-light text-center">
+                <tr>
+                    <th width="100">Acciones</th>
+                    <th>Proyecto</th>
+                </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="item : ${estimaciones}">
+                        <td class="text-center">
+                            <a href="#" th:attr="href='/EstimacionesAdmin/Editar/'+${item.codProyecto}" class="btn btn-warning">Editar</a>
+                            <a href="#" class="btn btn-info btn-descargar-reporte" th:onclick="'javascript:descargar(' + ${item.codProyecto} + ');'"><i class="fas fa-cloud-download-alt"></i> Descargar</a>
+                        </td>
+                        <td><span th:text="${item.nombreProyecto}"></span></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <input type="hidden" id="api" th:value="${api}">
+    </div>
+</body>
+</html>

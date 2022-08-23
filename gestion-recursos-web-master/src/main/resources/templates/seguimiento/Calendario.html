@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html layout:decorate="~{Layout}"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      >
+    <head>
+        <title>Calendario</title>
+    </head>
+    <body>
+        <th:block layout:fragment="estilos">
+            <link href="/Complementos/scheduler/codebase/dhtmlxscheduler_material.css" rel="stylesheet"></script>
+        </th:block>
+        <th:block layout:fragment="scripts">
+            <script type="text/javascript" src="/Complementos/scheduler/codebase/dhtmlxscheduler.js"></script>
+            <script type="text/javascript" src="/Complementos/scheduler/codebase/ext/dhtmlxscheduler_year_view.js"></script>
+            <script type="text/javascript" src="/Complementos/scheduler/codebase/locale/locale_es.js"></script>
+
+            <script type="text/javascript" src="/Scripts/seguimiento.js"></script>
+            <script type="text/javascript" src="/Scripts/calendario.js"></script>
+        </th:block>
+
+        <div layout:fragment="content" class="cl-seccion-calendario">		
+            <div class="row">
+                <div class="col-4">
+                    <select id="ddl-seguimiento-tipo" class="form-control">
+                        <option value="">Seleccione tipo de visualización...</option>
+                        <option value="PROYECTO">Por proyecto</option>
+                        <option value="PROVEEDOR">Por proveedor</option>
+                        <option value="RECURSO">Por recurso</option>
+                    </select>
+                </div>
+                <div class="col-4">
+                    <select id="ddl-seguimiento-subtipo" class="form-control cl-select-picker" data-live-search="true">
+                        <option>Seleccione...</option>
+                    </select>
+                </div>
+                <div class="col-12">
+                    <div id="cl-calendario"class="dhx_cal_container" style='width:100%; height:100vh;'>
+                        <div class="dhx_cal_navline">
+                            <div class="dhx_cal_prev_button">&nbsp;</div>
+                            <div class="dhx_cal_next_button">&nbsp;</div>
+                            <div class="dhx_cal_today_button"></div>
+                            <div class="dhx_cal_date"></div>
+                            <div class="dhx_cal_tab" name="day_tab"></div>
+                            <div class="dhx_cal_tab" name="week_tab"></div>
+                            <div class="dhx_cal_tab" name="month_tab"></div>
+                            <div class="dhx_cal_tab" name="year_tab"></div>
+                        </div>
+                        <div class="dhx_cal_header"></div>
+                        <div class="dhx_cal_data"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>

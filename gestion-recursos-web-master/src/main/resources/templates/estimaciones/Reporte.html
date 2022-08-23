@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html layout:decorate="~{Layout}">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Reporte</title>
+</head>
+
+<body>
+
+    <div layout:fragment="content">
+        <div th:insert="MensajesFormulario.html :: mensajes_formulario"></div>
+        <div th:if="${error != null}" class="alert alert-danger">
+            <div th:text="${error}"></div>
+        </div>
+
+        <div class="row">
+            <div class="col-12 mt-5 bg-danger">
+
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12" th:if="${proyectos != null }">
+                <label>Proyecto</label>
+                <select id="proyecto" class="form-control cl-select-picker"
+                    th:classappend="${ estimacion == null ? '' : 'disabled'}" data-live-search="true" required
+                    data-rule-min="1" data-msg-min="Debe seleccionar una opción">
+                    <option value="0">Seleccione...</option>
+                    <option style="width: 80px" th:each="item : ${proyectos}" th:value="${item.codProyecto}"
+                        th:text="${item.nombreProyecto}">
+                    </option>
+                </select>
+            </div>
+
+            <div id="coordinacionBox" class="col-md-12 d-none">
+                <label>Coordinacion</label>
+                <select id="coordinacionSelect" class="form-control cl-select-picker" data-live-search="true" required
+                    data-rule-min="1" data-msg-min="Debe seleccionar una opción">
+                </select>
+            </div>
+            <div class="col-md-12" th:if="${proyectos == null }">
+                <span>
+                    <h3>No se cargaron los datos del Formulario</h3>
+                </span>
+            </div>
+
+        </div>
+        <div id="panelgraficas" class="row">
+            <div class="col-md-12">
+                <div class="row">
+                    <div class="col-xl-6 chart-costo-estimacion">
+                        <div class="card">
+                            <div class="card-header">
+                                <h5>Costo Total  Estimación por Proyecto</h5>
+                            </div>
+                            <div class="card-block">
+                                <div id="chart-costo-estimacion" style="height: 300px"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-xl-6 chart-hora-reportadas">
+                        <div class="card">
+                            <div class="card-header">
+                                <h5>Costo Fábrica por Coordinacion</h5>
+                            </div>
+                            <div class="card-block">
+                                <div id="chart-hora-reportadas" style="height: 300px"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-xl-6 chart-hora-estimacion-menos-hora-reportadas">
+                        <div class="card">
+                            <div class="card-header">
+                                <h5>Presupuesto Disponible</h5>
+                            </div>
+                            <div class="card-block">
+                                <div id="chart-hora-estimacion-menos-hora-reportadas" style="height: 300px"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xl-6 chart-presupuesto-total">
+                        <div class="card ">
+                            <div class="card-header">
+                                <h5>Presupuesto Total </h5>
+                            </div>
+                            <div class="card-block">
+                                <div id="chart-presupuesto-total" style="height: 300px"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xl-6 chart-hora-reportada-empleado">
+                        <div class="card ">
+                            <div class="card-header">
+                                <h5>Detalle Total Costo Proyecto</h5>
+                            </div>
+                            <div class="card-block">
+                                <div id="chart-hora-reportada-empleado" style="height: 500px"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xl-6 chart-horas-extras">
+                        <div class="card">
+                            <div class="card-header">
+                                <h5>Horas Extras Por Empleado</h5>
+                            </div>
+                            <div class="card-block">
+                                <div id="chart-horas-extras" style="height: 500px"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <th:block layout:fragment="scripts">
+
+        <script src="/Estilos/Plantilla/assets/plugins/chart-morris/js/raphael.min.js"></script>
+        <script src="/Estilos/Plantilla/assets/plugins/chart-morris/js/morris.min.js"></script>
+        <script src="/Scripts/morrisDonutData.js"></script>
+        <script src="/Scripts/estimacionReporte.js"></script>
+
+    </th:block>
+
+</body>
+
+</html>

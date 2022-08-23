@@ -1,0 +1,25 @@
+<div id="accordion">
+	<div class="card" th:each="item : ${modelo}" th:attr="id='tarea-historial-'+${item.id}">
+		<div class="card-header p-0" th:attr="id='heading-'+${item.id}">
+			<div class="row">
+				<div class="col-10">
+					<h5 class="mb-0">
+						<button class="btn btn-link collapsed" data-toggle="collapse" aria-expanded="true" 
+								th:attr="data-target='#collapse-'+${item.id},aria-controls='collapse-'+${item.id}"
+								th:text="${#dates.format(item.fechahorainicio, 'dd/MM/yyyy')} + ' - ' + ${#dates.format(item.fechahorafin, 'dd/MM/yyyy')} + ': &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' + ${item.horas} + ' horas'" type="button"></button>
+					</h5>
+				</div>
+				<div class="col-2 text-right">
+					<button type="button" class="btn" th:attr="onclick='eliminarEmpleadoControl(' + ${item.id} + ');'" >
+						<i class="far fa-trash-alt"></i>
+					</button>
+				</div>
+			</div>
+		</div>
+
+		<div th:attr="id='collapse-'+${item.id},aria-labelledby='heading-'+${item.id}" class="collapse" data-parent="#accordion">
+			
+			<div class="card-body p-2" th:text="${item.descripcion}"></div>
+		</div>
+	</div>
+</div>

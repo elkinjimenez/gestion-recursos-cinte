@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html layout:decorate="~{Layout}">
+<head>
+    <title>RoadMap</title>
+    <th:block layout:fragment="estilos">
+        <link href="/Estilos/checkbox.css" rel="stylesheet"/>
+    </th:block>
+</head>
+<body>
+
+    <th:block layout:fragment="scripts">
+        <script type="text/javascript" src="/Scripts/roadMap.js"></script>
+    </th:block>
+
+    <div layout:fragment="content">
+        <div th:insert="MensajesFormulario.html :: mensajes_formulario"> </div>
+        <div th:if="${error != null}" class="alert alert-danger">
+            <div th:text="${error}"></div>
+        </div>
+
+        <form class="validate col-md-10 offset-md-1 mt-5" action="/CrearRoadMap" th:attr="action=${cl_formulario_url}" method="post">
+            <div class="card">
+                <div class="bg-danger text-center">
+                    <h1 class="text-white">RoadMap</h1>
+                </div>
+                <div class="card-body">
+                    <div class="row" th:object="${roadMap}" th:if="${datos_cargados}">
+                        <div class="col-12 mt-5 bg-danger">
+                            <input type="hidden" th:field="*{id}" />
+                            <input type="hidden" th:field="*{codPryBrief}" />
+                        </div>
+
+                        <div class="col-md-12 text-center">
+                            <label>Gerente: </label>
+                            <div class="form-group">
+                                <label th:text="${gerente}"></label>
+                            </div>
+                        </div>
+
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label>Nombre Microservicio</label>
+                                <input class="form-control" th:field="*{nombreMicroservicio}" type="text" maxlength="80" required />
+                            </div>
+                        </div>
+
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label>Tipo</label>
+                                <select class="form-control cl-select-picker" onchange="tipoRoadMap()" data-live-search="true" required th:field="*{tipo}" data-rule-min="1" data-msg-min="Debe seleccionar una opción">
+                                    <option value="0">Seleccione...</option>
+                                    <option th:each="item : ${tiposRoadMap}" th:value="${item.id}" th:text="${item.nombre}"></option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label>Despliegue</label>
+                                <select class="form-control cl-select-picker" data-live-search="true" required th:field="*{despliegue}" data-rule-min="1" data-msg-min="Debe seleccionar una opción">
+                                    <option value="0">Seleccione...</option>
+                                    <option th:each="item : ${listDespliegue}" th:value="${item.id}" th:text="${item.nombre}"></option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="col-md-4 mongoVersion">
+                            <div class="form-group">
+                                <label>Mongoversión</label>
+                                <input class="form-control" th:field="*{mongoVersion}" type="text" maxlength="30" required />
+                            </div>
+                        </div>
+
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label>Estado</label>
+                                <select class="form-control cl-select-picker" data-live-search="true" required th:field="*{estado}" data-rule-min="1" data-msg-min="Debe seleccionar una opción">
+                                    <option value="0">Seleccione...</option>
+                                    <option th:each="item : ${estadosRoadMap}" th:value="${item.id}" th:text="${item.nombre}"></option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="col-md-4 jdkVersion">
+                            <div class="form-group">
+                                <label>JDK Versión</label>
+                                <input class="form-control" th:field="*{jdkVersion}" type="text" maxlength="30" required />
+                            </div>
+                        </div>
+
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label>Wo Estandares</label>
+                                <input class="form-control" th:field="*{woEstandares}" maxlength="30" type="text" required />
+                            </div>
+                        </div>
+
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label>Wo Documentación</label>
+                                <input class="form-control" th:field="*{woDocumentacion}" maxlength="30" type="text" required />
+                            </div>
+                        </div>
+
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label>Wo 3Scale </label>
+                                <input class="form-control" th:field="*{tryscape}" maxlength="30" type="text" required />
+                            </div>
+                        </div>
+
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label>URL DEV</label>
+                                <textarea class="form-control" th:field="*{urlDev}" rows="5" maxlength="280"></textarea>
+                            </div>
+                        </div>
+
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label>URL QA</label>
+                                <textarea class="form-control" th:field="*{urlQa}" rows="5" maxlength="280"></textarea>
+                            </div>
+                        </div>
+
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label>URL Producción</label>
+                                <textarea class="form-control" th:field="*{urlProduccion}" rows="5" maxlength="280"></textarea>
+                            </div>
+                        </div>
+
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label>Descripción formal del servicio</label>
+                                <textarea class="form-control" th:field="*{descripcionServicio}" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" rows="5" maxlength="580" required></textarea>
+                            </div>
+                        </div>
+
+                        <div class="col-md-4 informacion3scala">
+                            <div class="form-group">
+                                <label>Información 3scala</label>
+                                <textarea class="form-control" th:field="*{informacion3scala}" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" rows="5" maxlength="280" required></textarea>
+                            </div>
+                        </div>
+
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label>Estado Servicio</label>
+                                <select class="form-control cl-select-picker" data-live-search="true" required th:field="*{estadoMicroservicio}" data-rule-min="1" data-msg-min="Debe seleccionar una opción">
+                                    <option value="0">Seleccione...</option>
+                                    <option th:each="item : ${estadosEntrega}" th:value="${item.id}" th:text="${item.nombre}"></option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label>Introducción al Servicio</label>
+                            </div>
+                            <div class="checkbox checkbox-fill">
+                                <input type="checkbox" th:field="*{introduccionServicio}" id="introduccionServicio" checked="">
+                                <label for="introduccionServicio" class="cr"></label>
+                            </div>
+                        </div>
+
+                        <div class="col-12">
+                            <div class="form-group text-center">
+                                <div class="separador-30"></div>
+                                <input type="submit" class="btn btn-info" value="Guardar" id="btnGuardar" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row" th:if="${!datos_cargados}">
+                        <div class="col-md-12">
+                            <span><h3>No se cargaron los combos  del formulario </h3></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+
+</body>
+</html>

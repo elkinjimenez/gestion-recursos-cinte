@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html layout:decorate="~{Layout}">
+<head>
+	<title>Tarea</title>
+</head>
+<body>
+	<div class="card cl-tarea-item" th:fragment="tarea_plantilla">		
+		<form id="cl-form-tarea" class="validate" method="post" action="/Tarea" th:object="${modelotarea}">
+			<input type="hidden" name="id"/>
+			<input type="hidden" name="codtareapadre"/>
+			<input type="hidden" name="codempleadoasignado" />
+		 	<div class="card-body p-3">		 		
+	 			<ul class="nav nav-tabs" id="cl-tarea-tabs" role="tablist">
+					<li class="nav-item">
+						<a class="nav-link active" id="tarea-info-tab" data-toggle="tab" href="#tarea-info-panel" role="tab" aria-controls="tarea-info-panel" aria-selected="true" data-completado="false">
+							Descripción
+						</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link" id="tarea-estimacion-tab" data-toggle="tab" href="#tarea-estimacion-panel" role="tab" aria-controls="tarea-estimacion-panel" aria-selected="false" data-completado="false">
+							Planeación
+						</a>
+					</li>
+					<li id="tareaFormRegistroTiempo" class="nav-item">
+						<a class="nav-link" id="tarea-tiempo-tab" data-toggle="tab" href="#tarea-tiempo-panel" role="tab" aria-controls="tarea-tiempo-panel" aria-selected="false" data-completado="false">
+							Registro de tiempo
+						</a>
+					</li>
+					<li class="nav-item">
+						<button type="button" class="nav-link" id="btn-tarea-crear-tab">
+							<i class="fas ico-crear fa-plus"></i>
+							<i class="fas ico-regresar fa-arrow-left" style="display: none;"></i>
+							<span>Crear tarea</span>
+						</button>
+					</li>
+				</ul>
+				<div class="tab-content mt-3" id="cl-tarea-tabs-content">
+					<div class="tab-pane fade show active" id="tarea-info-panel" role="tabpanel" aria-labelledby="tarea-info-tab">
+				  		<div class="row">
+				 			<div class="col-sm-6">
+						 		<div class="form-group">
+						    		<input type="text" th:field="*{nombre}" class="form-control" placeholder="Título" required autocomplete="off" maxlength="200" />
+						    	</div>
+					    	</div>
+					    	<div class="col-sm-4">
+					    		<div class="form-group">
+					    			<select th:field="*{codtareatipo}" class="form-control" required>
+					    				<option value="">Tipo</option>
+					    				<option th:each="item : ${tareatipos}" th:value="${item.id}" th:text="${item.nombre}" th:style="'background-color: ' + ${item.color} + ';'" th:attr="data-color=${item.color}"></option>
+					    			</select>
+					    		</div>
+					    	</div>
+					    	<div class="col-sm-2">
+					    		<div class="form-group">
+					    			<div class="separador-10"></div>
+					    			<input type="checkbox" th:field="*{eslogro}" />
+					    			<label for="eslogro1">&nbsp;Es logro</label>
+					    		</div>
+					    	</div>
+					    	<div class="col-sm-8">
+					    		<div class="form-group">
+					    			<select class="form-control cl-select-picker" data-live-search="true" name="codempleadoasignado">
+					    				<option value="">Responsable</option>
+					    				<option th:each="item : ${empleados}" th:value="${item.codempleado}" th:text="${item.numerodocumento}+' - '+${item.nombre}+' - '+${item.proveedor}"></option>
+					    			</select>
+					    		</div>
+					    	</div>
+					    	<div class="col-sm-4">
+					    		<div class="form-group">
+					    			<select class="form-control" name="codtareaestado" required data-rule-min="1" data-msg-min="Debe seleccionar una opción">
+					    				<option value="0">Seleccione...</option>
+					    				<option value="1">Estado: Pendiente</option>
+										<option value="2" selected>Estado: Nuevo</option>
+										<option value="3">Estado: Progreso</option>
+										<option value="4">Estado: Bloqueado</option>
+										<option value="5">Estado: Finalizado</option>
+										<option value="6">Estado: Rechazado</option>
+					    			</select>
+					    		</div>
+					    	</div>
+					    	<div class="col-12">
+					    		<div class="form-group">
+					    			<textarea class="form-control" name="descripcion" placeholder="Descripción" rows="3" maxlength="1000"></textarea>
+					    		</div>
+					    	</div>
+					    	<div class="col-12">
+					    		<div class="form-group">
+					    			<input type="hidden" name="codproyecto"/>
+					    			<select class="form-control" name="codproyecto" required disabled>
+					    				<option value="">Proyecto...</option>
+					    				<option th:each="item : ${proyectos}" th:value="${item.id}" th:text="${item.nombre}"></option>
+					    			</select>
+					    		</div>
+					    	</div>
+					    </div>
+					</div>
+					<div class="tab-pane fade" id="tarea-estimacion-panel" role="tabpanel" aria-labelledby="tarea-estimacion-tab">
+				    	<div class="text-center text-bold">
+				    		<strong>Información de estimación</strong>
+				    	</div>
+				    	<div class="divider mb-1"></div>
+					    <div class="row">
+					    	<div class="col-4">
+					    		<div class="form-group">
+					    			<label>Fecha inicio</label>
+					    			<input type="text" name="fechainiestimada" class="form-control cl-date-picker" autocomplete="off"/>
+					    		</div>
+					    	</div>
+					    	<div class="col-4">
+					    		<div class="form-group">
+					    			<label>Fecha fin</label>
+					    			<input type="text" name="fechafinestimada" class="form-control cl-date-picker" autocomplete="off"/>
+					    		</div>
+					    	</div>
+					    	<div class="col-4">
+					    		<div class="form-group">
+					    			<label>Tiempo en horas</label>
+					    			<input type="number" name="tiempoestimado" class="form-control"/>
+					    		</div>
+					    	</div>
+					    </div>
+					    <div class="divider mt-1"></div>
+				    	<div class="text-center text-bold">
+				    		<strong>Información real</strong>
+				    	</div>
+				    	<div class="divider mb-1"></div>
+					    <div class="row">
+					    	<div class="col-4">
+					    		<div class="form-group">
+					    			<label>Fecha inicio</label>
+					    			<input type="text" name="fechainireal" class="form-control" readonly/>
+					    		</div>
+					    	</div>
+					    	<div class="col-4">
+					    		<div class="form-group">
+					    			<label>Fecha fin</label>
+					    			<input type="text" name="fechafinreal" class="form-control" readonly/>
+					    		</div>
+					    	</div>
+					    	<div class="col-4">
+					    		<div class="form-group">
+					    			<label>Tiempo en horas</label>
+					    			<input type="number" name="tiemporeal" class="form-control"  readonly/>
+					    		</div>
+					    	</div>
+				    	</div>
+						<div class="divider mt-1"></div>
+						<div class="text-center text-bold">
+							<strong>Información Complementaria</strong>
+						</div>
+						<div class="divider mb-1"></div>
+						<div class="row">
+							<div class="col-6">
+								<div class="form-group">
+									<label>Fecha compromiso</label>
+									<input type="text" name="fechacompromiso" class="form-control cl-date-picker"/>
+								</div>
+							</div>
+							<div class="col-6">
+								<div class="form-group">
+									<label>Fecha solicitud</label>
+									<input type="text" name="fechasolicitud" class="form-control cl-date-picker"/>
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-12">
+								<div class="form-group">
+									<label>Descripción solicitud</label>
+									<textarea class="form-control" name="descripcionsolicitud" rows="3"></textarea>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="tab-pane fade" id="tarea-tiempo-panel" role="tabpanel" aria-labelledby="tarea-tiempo-tab">
+				    	<div class="row">
+					    	<div class="col-md-4">
+					    		<div class="form-group">
+					    			<label>Fecha</label>
+					    			<input type="text" class="form-control cl-date-picker" required th:id="fechahorainicio" th:name="fechahorainicio" autocomplete="off" maxlength="10"/>
+					    		</div>
+					    	</div>
+
+					    	<div class="col-md-4">
+						    	<div class="form-group">
+						    		<label>Horas</label>
+						    		<input class="form-control" required type="number" step="0.01" th:id="horas" th:name="horas" maxlength="6" placeholder="999,99"/>
+						    	</div>
+					    	</div>
+					    	<div class="col-md-12">
+						    	<div class="form-group">
+						    		<label>Descripción</label>
+						    		<textarea class="form-control" required th:id="descripciontiempo" th:name="descripciontiempo" rows="4" maxlength="1000"></textarea>
+						    	</div>
+					    	</div>
+					    	<div class="col-12">
+					    		<label>Historial</label>
+					    	</div>
+					    	<div class="col-12 cl-tarea-tiempo-historial">
+					    		
+					    	</div>
+				    	</div>
+					</div>
+				</div>
+			</div>
+		</form>
+	</div>
+</body>
+</html>

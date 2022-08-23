@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html layout:decorate="~{Layout}"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+>
+<head>
+    <title>Proveedor</title>
+</head>
+<body>
+<div layout:fragment="content">
+
+    <div th:insert="MensajesFormulario.html :: mensajes_formulario"></div>
+
+    <form class="validate" action="/Usuario" th:attr="action=${cl_formulario_url}" th:object="${modelo}" method="post">
+        <div class="row" th:if="${datos_cargados}">
+            <input type="hidden" th:field="*{id}"/>
+
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label>Elemento PEP</label>
+                    <input class="form-control" required type="text" th:field="*{elemento_pep}" maxlength="50"/>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label>Presupuesto USSD</label>
+                    <input class="form-control" required type="number" step="0.01" th:field="*{presupuesto_ussd}"
+                           maxlength="16" max="9999999999" placeholder="9999999999999,99"/>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label>Presupuesto COP</label>
+                    <input class="form-control" type="number" step="0.01" th:field="*{presupuesto_cop}" maxlength="16"
+                           max="9999999999" placeholder="9999999999999,99"/>
+                </div>
+            </div>
+
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label>Saldo USSD</label>
+                    <input class="form-control" required type="number" step="0.01" th:field="*{saldo_ussd}"
+                           maxlength="16" max="9999999999" placeholder="9999999999999,99"/>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label>Saldo COP</label>
+                    <input class="form-control" type="number" max="9999999999" step="0.01" th:field="*{saldo_cop}" maxlength="16"
+                           placeholder="9999999999999,99"/>
+                </div>
+                
+            </div>
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label>Año Vigencia</label>
+                    <input class="form-control" type="number" min="2017" max="2200" th:field="*{vigencia}"
+                           placeholder="Año Vigencia"/>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label>Posición presupuestal</label>
+                    <input required class="form-control" type="text" th:field="*{pocisionpresupuestal}" maxlength="20"/>
+                </div>
+            </div>
+            <div th:if="${gerentes.size() > 0}" class="col-md-3">
+                <div class="form-group">
+                    <label>Gerente</label>
+                    <select class="form-control cl-select-picker" data-live-search="true"
+                            th:field="*{codempleadogerente}" required data-rule-min="1"
+                            data-msg-min="Debe seleccionar una opción">
+                        <option value="">Seleccione...</option>
+                        <option th:each="g: ${gerentes}" th:text="${g.nombre}" th:value="${g.codempleado}"></option>
+                    </select>
+                </div>
+            </div>
+            <div th:if="${gerentes.size() == 0}" class="col-md-3">
+                <p>No se han asignado gerentes, por favor gestionar en la opción Estructura organizacional</p>
+            </div>
+            <div class="col-12">
+                <div class="form-group text-center">
+                    <div class="separador-30"></div>
+                    <input type="submit" class="btn btn-info" th:disabled="${gerentes.size() == 0}" value="Guardar"/>
+                    
+                </div>
+            </div>
+        </div>
+        <div class="row" th:if="${!datos_cargados}">
+            <div class="col-md-12">
+                <span><h3>No se cargaron los combos  del formulario </h3></span>
+            </div>
+        </div>
+    </form>
+</div>
+</body>
+</html>

@@ -1,0 +1,46 @@
+<div th:if="${#lists.isEmpty(modelo)}">
+ 	<div class="col-12">
+ 		<h3>No se encontraron resultados...</h3>
+ 	</div>
+</div>
+<th:block th:each="itemTareaEstadoTipo : ${tareaestadotipos}">
+	<div class="col-sm-3">
+		<h5 th:text="${itemTareaEstadoTipo.nombre}"></h5>
+		<div class="divider mb-3"></div>
+		<div class="row">
+			<th:block th:each="item : ${modelo}" th:if="${itemTareaEstadoTipo.id == item.codtareaestadotipo}">
+				<div class="col-12 cl-tarea-list-item mb-2">
+					<form>
+						<div class="card">
+						  <div class="card-body p-2 position-relative">
+						  	<button type="button" class="btn-tarea-expandir btn btn-default btn-sm position-absolute">
+						  		<i class="fas fa-expand"></i>
+						  	</button>
+						    <h5 class="card-title" th:text="${#strings.abbreviate(item.nombre, 25)}"></h5>
+						    <p class="card-text" th:text="${#strings.abbreviate(item.descripcion, 100)}"></p>
+						    <strong>Estado: </strong><th:block th:text="${item.tareaestado}"></th:block>
+						    <div></div>
+						    <strong>Tipo: </strong><th:block th:text="${item.tareatipo}"></th:block>
+						    <div></div>
+						    <strong>Asignado a: </strong><th:block th:text="${item.empleadoasignado}"></th:block>
+						  </div>
+						</div>
+						<input type="hidden" name="id" th:value="${item.codtarea}" />
+						<input type="hidden" name="nombre" th:value="${item.nombre}" />
+						<input type="hidden" name="codtareatipo" th:value="${item.codtareatipo}"/>
+						<input type="hidden" name="codempleadoasignado" th:value="${item.codempleadoasignado}"/>
+						<input type="hidden" name="codtareaestado" th:value="${item.codtareaestado}"/>
+						<input type="hidden" name="descripcion" th:value="${item.descripcion}"/>
+						<input type="hidden" name="codproyecto" th:value="${item.codproyecto}"/>
+						<input type="hidden" name="fechainiestimada" th:value="${item.fechainiestimada}"/>
+						<input type="hidden" name="fechafinestimada" th:value="${item.fechafinestimada}"/>
+						<input type="hidden" name="tiempoestimado" th:value="${item.tiempoestimado}"/>
+						<input type="hidden" name="fechainireal" th:value="${item.fechainireal}?${#dates.format(item.fechainireal, 'dd/MM/yyyy')}:''"/>
+						<input type="hidden" name="fechafinreal" th:value="${item.fechafinreal}?${#dates.format(item.fechafinreal, 'dd/MM/yyyy')}:''"/>
+						<input type="hidden" name="tiemporeal" th:value="${item.tiemporeal}"/>
+					</form>
+				</div>
+			</th:block>
+		</div>	
+	</div>
+</th:block>

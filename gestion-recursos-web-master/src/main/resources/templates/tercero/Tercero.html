@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html layout:decorate="~{Layout}">
+<head>
+    <title>Terceros</title>
+</head>
+<body>
+<div layout:fragment="content">
+
+    <div th:insert="MensajesFormulario.html :: mensajes_formulario"></div>
+
+    <form class="validate" action="/Usuario" th:attr="action=${cl_formulario_url}" th:object="${modelo}" method="post">
+        <div class="row" th:if="${datos_cargados}">
+            <input type="hidden" th:field="*{id}"/>
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label>Tipo</label>
+                    <select class="form-control cl-select-picker" required th:field="*{codtercerotipo}"
+                            data-rule-min="1" data-msg-min="Debe seleccionar una opción">
+                        <option value="0">Seleccione...</option>
+                        <option th:each="item : ${terceroTipos}" th:value="${item.id}"
+                                th:text="${item.nombre}"></option>
+                    </select>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label>Nombre</label>
+                    <input class="form-control" type="text" required th:field="*{nombre}" maxlength="200"/>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label>Nit</label>
+                    <input class="form-control" type="number" th:field="*{nit}" maxlength="20"/>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label>Teléfono</label>
+                    <input class="form-control" type="text" th:field="*{telefono}" maxlength="50"/>
+                </div>
+            </div>
+            <div class="col-md-12">
+                <div class="form-group">
+                    <label>Descripción</label>
+                    <textarea class="form-control" th:field="*{descripcion}" maxlength="500" rows="5"></textarea>
+                </div>
+            </div>
+            <div class="col-12">
+                <div class="form-group text-center">
+                    <div class="separador-30"></div>
+                    <input type="submit" class="btn btn-info" value="Guardar"/>
+                </div>
+            </div>
+        </div>
+        <div class="row" th:if="${!datos_cargados}">
+            <div class="col-md-12">
+                <span><h3>No se cargaron los combos  del formulario </h3></span>
+            </div>
+        </div>
+    </form>
+</div>
+</body>
+</html>

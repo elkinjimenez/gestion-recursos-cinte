@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html layout:decorate="~{Layout}">
+<head>
+    <title>Hallazgos</title>
+</head>
+<body>
+<th:block layout:fragment="estilos">
+    <link href="/Complementos/DataTables/datatables.min.css"
+          rel="stylesheet" />
+</th:block>
+<th:block layout:fragment="scripts">
+    <script type="text/javascript"
+            src="/Complementos/DataTables/datatables.min.js" rel="stylesheet"></script>
+    <script type="text/javascript" src="/Scripts/cl-tablas.js"></script>
+    <script type="text/javascript">
+			$(function() {
+				function controlarCampoDesactivado(idCampo, desactivar) {
+					if (desactivar) {
+						$("#" + idCampo).prop("disabled", true);
+					} else {
+						$("#" + idCampo).removeAttr("disabled");
+					}
+				};
+
+				$("select#columnaUno").change(function() {
+					controlarCampoDesactivado("valorUno", !$(this).val());
+				});
+
+				$("select#columnaDos").change(function() {
+					controlarCampoDesactivado("valorDos", !$(this).val());
+				});
+
+				$("select#columnaTres").change(function() {
+					controlarCampoDesactivado("valorTres", !$(this).val());
+				});
+			});
+		</script>
+</th:block>
+
+<div layout:fragment="content">
+
+    <form th:action="@{/}">
+        <div class="col-12">
+            <div class="form-group text-center">
+                <input style="float:left;" type="submit" class="btn btn-primary" value="Inicio"/>
+                <div class="separador-30"></div>
+                <div class="separador-30"></div>
+            </div>
+        </div>
+
+        <h1 align="center">Crear Hallazgo</h1>
+        <div class="separador-30"></div>
+        <div class="separador-30"></div>
+    </form>
+
+    <form class="validate" method="post" action="/Hallazgo/Filtro?clm=adgcf"
+          th:object="${filtrosDto}">
+        <div class="row">
+
+            <div class="col-sm-12">
+                <div class="form-group" >
+                    <label>Proyecto</label> <select th:field="*{codproyecto}"
+                                                    class="form-control cl-select-picker cl-reporte-filtro"
+                                                    data-live-search="true" >
+                    <option value="">Todos...</option>
+                    <option th:each="item : ${proyectos}" th:value="${item.id}"
+                            th:text="${item.nombre}"></option>
+                </select>
+                </div>
+            </div>
+            <div class="col-sm-12 text-right">
+                <div class="form-group">
+                    <button type="submit" class="btn btn-info">
+                        <i class="fas fa-search"></i> Buscar
+                    </button>
+                    <div class="separador-30"></div>
+                </div>
+            </div>
+        </div>
+    </form>
+
+    <div th:insert="MensajesFormulario.html :: mensajes_formulario"> </div>
+
+    <div class="table-responsive">
+        <table
+                class="table table-striped table-sm table-bordered table-hover cl-tabla">
+            <thead class="thead-light text-center">
+            <tr>
+                <th>Hallazgo</th>
+                <th>Proyecto</th>
+                <th>Fecha Despliegue Real</th>
+                <th>Linea Producto</th>
+                <th>Brief</th>
+                <th>Id RLP</th>
+                <th>Id Cambio</th>
+                <th>Estado</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="item : ${modelo}">
+                <td align="center">
+                    <a href="#" th:attr="href='/Hallazgo/Crear?id='+${item.id}" class="btn btn-warning">Crear</a>
+                </td>
+                <td><span th:text="${item.codProyecto}"></span></td>
+                <td>
+                    <span th:text="${#dates.format(item.fechaDespliegueReal, 'dd/MM/yyyy HH:mm')}"></span>
+                </td>
+                <td><span th:text="${item.lineaProducto}"></span></td>
+                <td><span th:text="${item.brief}"></span></td>
+                <td><span th:text="${item.idRlp}"></span></td>
+                <td><span th:text="${item.idCambio}"></span></td>
+                <td><span th:text="${item.estado}"></span></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html layout:decorate="~{Layout}">
+<head>
+    <meta charset="UTF-8">
+    <title>Reporte</title>
+</head>
+<body>
+
+<div layout:fragment="content">
+    <div th:insert="MensajesFormulario.html :: mensajes_formulario"></div>
+    <div th:if="${error != null}" class="alert alert-danger">
+        <div th:text="${error}"></div>
+    </div>
+
+    <div class="row" th:if="${datos_cargados}">
+        <div class="col-12 mt-5 bg-danger">
+        </div>
+        <div class="col-sm-12" th:if="${estructuras.size() > 0}">
+            <div class="row">
+                <div class="col-sm-3">
+                    <div class="form-group">
+                        <label>Fecha inicio</label>
+                        <input name="fechaInicio" type="text" class="form-control cl-date-picker" autocomplete="off"/>
+                    </div>
+                </div>
+                <div class="col-sm-3">
+                    <div class="form-group">
+                        <label>Fecha fin</label>
+                        <input name="fechaFin" type="text" class="form-control cl-date-picker" autocomplete="off"/>
+                    </div>
+                </div>
+                <div class="col-sm-3">
+                    <div class="form-group">
+                        <label>Coordinación</label>
+                        <select name="codEstructura" class="form-control cl-select-picker cl-reporte-filtro"
+                                data-live-search="true" required>
+                            <option th:each="item : ${estructuras}" th:value="${item.id}"
+                                    th:text="${item.nombre}"></option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="col-md-3">
+                    <div class="form-group mt-4">
+                        <a href="#" onclick="monitore()" class="btn btn-info">Indicador</a>
+                    </div>
+                </div>
+
+                <div class="col-xl-12 indicador_calidad">
+                    <div class="card ">
+                        <div class="card-header">
+                            <h5>Indicador de Calidad</h5>
+                        </div>
+                        <div class="card-block">
+                            <div id="indicador_calidad" style="height:500px"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-12" th:if="${estructuras.size() == 0 or estructuras == null } ">
+            <span><h3>No se han cargado todos los datos  </h3></span>
+        </div>
+    </div>
+    <div class="row" th:if="${!datos_cargados}">
+        <div class="col-md-12">
+            <span><h3>No se cargaron los combos  del formulario </h3></span>
+        </div>
+    </div>
+</div>
+
+<th:block layout:fragment="scripts">
+
+    <script src="/Estilos/Plantilla/assets/plugins/chart-morris/js/raphael.min.js"></script>
+    <script src="/Estilos/Plantilla/assets/plugins/chart-morris/js/morris.min.js"></script>
+    <script src="/Scripts/morrisDonutData.js"></script>
+    <script src="/Scripts/monitoreo.js"></script>
+
+</th:block>
+
+</body>
+</html>

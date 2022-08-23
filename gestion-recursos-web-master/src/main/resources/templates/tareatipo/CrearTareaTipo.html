@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html layout:decorate="~{Layout}">
+	<head>
+		<title>Usuario</title>
+	</head>
+	<body>
+		<div layout:fragment="content">
+		
+			<div th:insert="MensajesFormulario.html :: mensajes_formulario"> </div>
+		
+		    <form class="validate" action="/Usuario" th:attr="action=${cl_formulario_url}" th:object="${modelo}" method="post">
+		    	<div class="row">
+			    	<input type="hidden" th:field="*{id}" />
+			    	<div class="col-md-6">
+			    		<div class="form-group">
+			    			<label>Nombre</label>
+			    			<input type="text" class="form-control" required th:field="*{nombre}" maxlength="100"/>
+			    		</div>
+			    	</div>
+			    	<div class="col-md-6">
+			    		<div class="form-group">
+			    			<label>Descripción</label>
+			    			<input type="text" class="form-control" th:field="*{descripcion}" maxlength="100"/>
+			    		</div>
+			    	</div>
+			    	<div class="col-md-6">
+			    		<div class="form-group">
+			    			<label>Jerarquia</label>
+			    			<input type="text" class="form-control" required th:field="*{jerarquia}" maxlength="100"/>
+			    		</div>
+			    	</div>
+			    	<div class="col-md-6">
+			    		<div class="form-group">
+			    			<label>color</label>
+			    			<input type="color" class="form-control" required th:field="*{color}">
+			    		</div>
+			    	</div>
+			    	<div class="col-12">
+			    		<div class="form-group text-center">
+			    			<div class="separador-30"></div>
+			    			<input type="submit" class="btn btn-info" value="Guardar"/>
+			    		</div>
+			    	</div>
+		    	</div>
+		    </form>
+		</div>
+	</body>
+</html>

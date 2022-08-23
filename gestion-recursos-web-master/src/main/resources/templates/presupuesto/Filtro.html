@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html layout:decorate="~{Layout}">
+<head>
+    <title>Presupuestos</title>
+</head>
+<body>
+<th:block layout:fragment="estilos">
+    <link href="/Complementos/DataTables/datatables.min.css" rel="stylesheet"/>
+</th:block>
+<th:block layout:fragment="scripts">
+    <script type="text/javascript" src="/Complementos/DataTables/datatables.min.js" rel="stylesheet"></script>
+    <script type="text/javascript" src="/Scripts/cl-tablas.js"></script>
+</th:block>
+
+
+<div layout:fragment="content">
+    <div class="table-responsive">
+        <table class="table table-striped table-sm table-bordered table-hover cl-tabla">
+            <thead class="thead-light text-center">
+            <tr>
+                <th>Ver</th>
+                <th>Elemento PEP</th>
+                <th>Presupuesto USSD</th>
+                <th>Presupusto COP</th>
+                <th>Saldo USSD</th>
+                <th>Saldo COP</th>
+                <th>Vigencia</th>
+                <th>Posición</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="item : ${modelo}">
+                <td align="center">
+                    <a href="#" th:attr="href='/Presupuesto/Editar/'+${item.id}" class="btn btn-warning">Editar</a>
+                </td>
+                <td>
+                    <span th:text="${item.elemento_pep}"></span>
+                </td>
+                <td>
+                    <span th:text="${item.presupuesto_ussd}"></span>
+                </td>
+                <td>
+                    <span th:text="${item.presupuesto_cop}"></span>
+                </td>
+
+                <td>
+                    <span th:text="${item.saldo_ussd}"></span>
+                </td>
+                <td>
+                    <span th:text="${item.saldo_cop}"></span>
+                </td>
+                <td>
+                    <span th:text="${item.vigencia}"></span>
+                </td>
+                <td>
+                    <span th:text="${item.pocisionpresupuestal}"></span>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+</body>
+</html>

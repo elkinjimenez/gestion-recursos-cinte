@@ -1,0 +1,1 @@
+Insert into df_usuariorol (ID,CODUSUARIOROL,FECHACREACION,FECHAMODIFICACION,NOMBRE) values ('3',null,sysdate ,sysdate,'Gerente');

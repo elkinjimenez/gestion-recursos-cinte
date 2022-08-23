@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html layout:decorate="~{Layout}">
+<head>
+    <title>Costos Empleados</title>
+</head>
+<body>
+<th:block layout:fragment="estilos">
+    <link href="/Complementos/DataTables/datatables.min.css"
+          rel="stylesheet" />
+</th:block>
+<th:block layout:fragment="scripts">
+    <script type="text/javascript"
+            src="/Complementos/DataTables/datatables.min.js" rel="stylesheet"></script>
+    <script type="text/javascript" src="/Scripts/cl-tablas.js"></script>
+    <script type="text/javascript">
+    </script>
+</th:block>
+
+<div layout:fragment="content">
+    <form class="validate" method="post" action="/CostoEmpleado/Filtro" th:object="${costoEmpleado}">
+        <h1>Listado de Costos</h1>
+    </form>
+
+    <div th:insert="MensajesFormulario.html :: mensajes_formulario"> </div>
+
+    <div class="table-responsive">
+        <table class="table table-striped table-sm table-bordered table-hover cl-tabla">
+            <thead class="thead-light text-center">
+                <tr>
+                    <th>Costo Empleado</th>
+                    <th>Nombre</th>
+                    <th>Apellido</th>
+                    <th>Usuario Claro</th>
+                    <th>Costo Punto</th>
+                    <th>Costo Mes</th>
+                    <th>Puntos Mes</th>
+                    <th>Factor Punto</th>
+                    <th>Modalidad</th>
+                    <th>Desde </th>
+                    <th>Hasta</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="item : ${costoEmpleado}">
+                    <td><a href="#"
+                            th:attr="#" class="">Editar
+                           <!--th:attr="href='/HallazgoRespuesta/Editar/'+${item.idHallazgo}" class="">Crear-->
+                        </a>
+                    </td>
+                    <td><span th:text="${item.nombre1}"></span></td>
+                    <td><span th:text="${item.apellido1}"></span></td>
+                    <td><span th:text="${item.usuarioclaro}"></span></td>
+                    <td><span th:text="${item.costoPunto}"></span></td>
+                    <td><span th:text="${item.costoMes}"></span></td>
+                    <td><span th:text="${item.puntosMes}"></span></td>
+                    <td><span th:text="${item.factorPunto}"></span></td>
+                    <td><span th:text="${item.modalidad}"></span></td>
+                    <td>
+                        <span th:text="${#dates.format(item.desde, 'dd/MM/yyyy')}"></span>
+                    </td>
+                    <td>
+                        <span th:text="${#dates.format(item.hasta, 'dd/MM/yyyy')}"></span>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+</body>
+</html>

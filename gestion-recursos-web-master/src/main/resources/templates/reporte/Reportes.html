@@ -1,0 +1,856 @@
+<!DOCTYPE html>
+<html layout:decorate="~{Layout}"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      >
+    <head>
+        <title>Reportes</title>
+    </head>
+    <body>
+        <th:block layout:fragment="estilos">
+            <link href="/Complementos/DataTables/datatables.min.css"
+                  rel="stylesheet"/>
+        </th:block>
+        <th:block layout:fragment="scripts">
+            <script type="text/javascript"
+            src="/Complementos/DataTables/datatables.min.js"></script>
+            <script type="text/javascript" src="/Scripts/cl-tablas.js"></script>
+
+            <script type="text/javascript">
+                $(function () {
+                    ocultarCampos($("#codreporte").val());
+                    $("button.btn-descargar-reporte")
+                            .click(
+                                    function () {
+                                        var datos = $(this).parents("form")
+                                                .serializeObject();
+
+                                        if (datos.eslogro === "")
+                                            datos.eslogro = null;
+                                        else
+                                            datos.eslogro = datos.eslogro === "1";
+
+                                        let
+                                                url = encodeURI(JSON.stringify(datos));
+                                        window
+                                                .open("/api/descargar?dominio="
+                                                        + encodeURI($(
+                                                                "select#codreporte option:selected")
+                                                                .attr(
+                                                                        "data-dominio"))
+                                                        + "&q=" + url);
+                                    });
+
+                    $("select#codreporte").change(function () {
+                        if ($(this).val() === "2") {
+                            $("form .cl-reporte-filtro").prop("disabled", true);
+                        } else {
+                            $("form .cl-reporte-filtro").removeAttr("disabled");
+                        }
+                    });
+
+                    $("select#codreporte").change(function () {
+                        ocultarCampos($(this).val());
+                    });
+                });
+
+                function ocultarCampos(codReporte) {
+                    if (codReporte === "12") {
+                        document.getElementById('tipotarea').disabled = true;
+                        document.getElementById('estadotarea').disabled = true;
+                        document.getElementById('responsable').disabled = true;
+                        document.getElementById('eslogro').disabled = true;
+                        document.getElementById('nombretarea').disabled = true;
+                        document.getElementById('creadortarea').disabled = true;
+                    }
+                    if (codReporte === "13") {
+                        document.getElementById('tipotarea').disabled = true;
+                        document.getElementById('estadotarea').disabled = true;
+                        document.getElementById('responsable').disabled = true;
+                        document.getElementById('eslogro').disabled = true;
+                        document.getElementById('nombretarea').disabled = true;
+                        document.getElementById('creadortarea').disabled = true;
+
+                    }
+                    if (codReporte === "14") {
+                        document.getElementById('tipotarea').disabled = true;
+                        document.getElementById('responsable').disabled = true;
+                        document.getElementById('eslogro').disabled = true;
+                        document.getElementById('creadortarea').disabled = true;
+                    }
+                }
+            </script>
+        </th:block>
+
+        <div layout:fragment="content" class="cl-seccion-reportes">
+            <form class="validate" method="post" action="Reportes?clm=re"
+                  th:object="${modelo}">
+                <div class="row" th:if="${datos_cargados}">
+                    <div class="col-sm-3">
+                        <div class="form-group" name="lista">
+                            <label>Reporte</label> <select th:field="*{codreporte}"
+                                                           class="form-control" required data-rule-min="1"
+                                                           data-msg-min="Debe seleccionar una opción">
+                                <option value="0">Seleccione...</option>
+                                <option value="1" data-dominio="reporte/tarea">Tareas</option>
+                                <option value="3" data-dominio="reporte/tiempo" selected>Tiempos
+                                    Reportados (Resumen)
+                                </option>
+                                <option value="4" data-dominio="reporte/tiempo">Tiempos
+                                    Reportados (Detalle)
+                                </option>
+                                <option sec:authorize="hasAuthority('GERENTE')" value="5"
+                                        data-dominio="reporte/prorrateo">Prorrateo por persona
+                                </option>
+                                <option sec:authorize="hasAuthority('GERENTE')" value="6"
+                                        data-dominio="reporte/prorrateo/general">Prorrateo
+                                    General
+                                </option>
+                                <option value="7" data-dominio="reporte/proveedor">Recursos
+                                    con proveedor y ID
+                                </option>
+                                <option value="8" data-dominio="reporte/prorrateovspresupuesto">Prorrateo
+                                    vs Presupuesto
+                                </option>
+                                <option value="9" data-dominio="reporte/solicitudes">Listado
+                                    solicitudes
+                                </option>
+                                <option value="10" data-dominio="reporte/opex">Opex</option>
+
+                                <option value="12" data-dominio="reporte/pagos">RH Pagos</option>
+                                <option value="13" data-dominio="reporte/empleados">Empleados</option>
+                                <option value="14" data-dominio="reporte/compromisos">Informe Compromisos</option>
+
+                                <!-- option value="2">Proyectos</option-->
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-sm-2">
+                        <div class="form-group">
+                            <label>Fecha inicio</label> <input th:field="*{fechainicio}"
+                                                               type="text" class="form-control cl-date-picker"
+                                                               autocomplete="off"
+                                                               th:value="${fechainicio}?${#dates.format(fechainicio, 'dd/MM/yyyy')}:''"
+                                                               readonly/>
+                        </div>
+                    </div>
+                    <div class="col-sm-2">
+                        <div class="form-group">
+                            <label>Fecha fin</label> <input th:field="*{fechafin}" type="text"
+                                                            class="form-control cl-date-picker" autocomplete="off"
+                                                            th:value="${fechafin}?${#dates.format(fechafin, 'dd/MM/yyyy')}:''"
+                                                            readonly/>
+                        </div>
+                    </div>
+                    <div class="col-sm-3">
+                        <div class="form-group">
+                            <label>Proyecto</label> <select th:field="*{codproyecto}"
+                                                            class="form-control cl-select-picker cl-reporte-filtro"
+                                                            data-live-search="true">
+                                <option value="">Todos...</option>
+                                <option style="width:50px" th:each="item : ${proyectos}" th:value="${item.id}"
+                                        th:text="${item.nombre}"></option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-sm-2">
+                        <div class="form-group">
+                            <label>Tipo de tarea</label> <select th:field="*{codtareatipo}"
+                                                                 class="form-control cl-reporte-filtro" id="tipotarea">
+                                <option value="">Todos...</option>
+                                <option th:each="item : ${tareaTipos}" th:value="${item.id}"
+                                        th:text="${item.nombre}"
+                                        th:style="'background-color: ' + ${item.color} + ';'"></option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-sm-3">
+                        <div class="form-group">
+                            <label>Proveedor</label> <select th:field="*{codproveedor}"
+                                                             class="form-control cl-select-picker cl-reporte-filtro"
+                                                             data-live-search="true" id>
+                                <option value="">Todos...</option>
+                                <option th:each="item : ${proveedores}" th:value="${item.id}"
+                                        th:text="${item.nombre}"></option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            <label>Responsable</label> <select
+                                th:field="*{codempleadoasignado}"
+                                class="form-control cl-select-picker cl-reporte-filtro"
+                                id="responsable" data-live-search="true">
+                                <option value="">Todos...</option>
+                                <option th:each="item : ${empleados}"
+                                        th:value="${item.codempleado}"
+                                        th:text="${item.numerodocumento}+' - '+${item.nombre}+' - '+${item.proveedor}"></option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-sm-3">
+                        <div class="form-group">
+                            <label>Estado de la tarea</label> <select
+                                th:field="*{codtareaestado}"
+                                class="form-control cl-select-picker  cl-reporte-filtro"
+                                id="estadotarea" data-live-search="true">
+                                <option value="">Todos...</option>
+                                <option th:each="item : ${tareaEstados}" th:value="${item.id}"
+                                        th:text="${item.nombre}"></option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-sm-2">
+                        <div class="form-group">
+                            <label>Es logro</label> <select th:field="*{eslogro}"
+                                                            class="form-control cl-reporte-filtro" id="eslogro">
+                                <option value="">Todos...</option>
+                                <option value="1">Si</option>
+                                <option value="0">No</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-sm-3">
+                        <div class="form-group">
+                            <label>Nombre de la tarea</label> <input th:field="*{tarea}"
+                                                                     type="text" class="form-control cl-reporte-filtro"
+                                                                     id="nombretarea"/>
+                        </div>
+                    </div>
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            <label>Creador de la tarea</label> <select
+                                th:field="*{codempleadocreo}"
+                                class="form-control cl-select-picker cl-reporte-filtro"
+                                id="creadortarea" data-live-search="true">
+                                <option value="">Todos...</option>
+                                <option th:each="item : ${empleados}"
+                                        th:value="${item.codempleado}"
+                                        th:text="${item.numerodocumento}+' - '+${item.nombre}+' - '+${item.proveedor}"></option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-sm-5 text-right">
+                        <div class="form-group">
+                            <div class="separador-30"></div>
+                            <button type="submit" class="btn btn-info">
+                                <i class="fas fa-search"></i> Buscar
+                            </button>
+                            <button type="button" class="btn btn-info btn-descargar-reporte">
+                                <i class="fas fa-cloud-download-alt"></i> Descargar
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="row" th:if="${!datos_cargados}">
+                    <div class="col-md-12">
+                        <span><h3>No se cargaron los combos  del formulario </h3></span>
+                    </div>
+                </div>
+            </form>
+            <div class="separador-30"></div>
+            <div th:if="${modelo.codreporte == 1}" class="table-responsive">
+                <table class="table table-striped table-sm table-bordered table-hover cl-tabla">
+                    <thead class="thead-light text-center">
+                        <tr>
+                            <th>Proyecto</th>
+                            <th>Miga</th>
+                            <th>Tarea</th>
+                            <th>Tipo</th>
+                            <th>Estado</th>
+                            <th>Es logro</th>
+                            <th>Responsable</th>
+                            <th>Fecha ini real</th>
+                            <th>Fecha fin real</th>
+                            <th>Tiempo real</th>
+                            <th>Tiempo total</th>
+                            <th>Fecha ini estimada</th>
+                            <th>Fecha fin estimada</th>
+                            <th>Tiempo estimado</th>
+                            <th>Proveedor</th>
+                            <th>Fecha creación</th>
+                            <th>Quién la creó</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="item : ${resultado}">
+                            <td th:text="${item.proyecto}"></td>
+                            <td th:text="${item.tarearuta}">Miga</td>
+                            <td th:text="${item.tarea}">Tarea</td>
+                            <td th:text="${item.tareatipo}">Tipo</td>
+                            <td th:text="${item.tareaestado}">Estado</td>
+                            <td th:text="${item.eslogro} ? 'Si' : 'No'">Es logro</td>
+                            <td th:text="${item.empleadoasignado}">Responsable</td>
+                            <td th:text="${#dates.format(item.fechainireal, 'dd/MM/yyyy')}">Fecha
+                                ini real
+                            </td>
+                            <td th:text="${#dates.format(item.fechafinreal, 'dd/MM/yyyy')}">Fecha
+                                fin real
+                            </td>
+                            <td th:text="${item.tiemporeal}">Tiempo real</td>
+                            <td th:text="${item.tiemporealacumulado}">Tiempo total</td>
+                            <td
+                                th:text="${#dates.format(item.fechainiestimada, 'dd/MM/yyyy')}">Fecha
+                                ini estimada
+                            </td>
+                            <td
+                                th:text="${#dates.format(item.fechafinestimada, 'dd/MM/yyyy')}">Fecha
+                                fin estimada
+                            </td>
+                            <td th:text="${item.tiempoestimado}">Tiempo estimado</td>
+                            <td th:text="${item.proveedor}">Proveedor</td>
+                            <td th:text="${#dates.format(item.fechacreacion, 'dd/MM/yyyy')}">Fecha
+                                creación
+                            </td>
+                            <td th:text="${item.empleadocreo}">Quién la creó</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div th:if="${modelo.codreporte == 3}" class="table-responsive">
+                <table
+                    class="table table-striped table-sm table-bordered table-hover cl-tabla">
+                    <thead class="thead-light text-center">
+                        <tr>
+                            <th>Proyecto</th>
+                            <th>Tarea</th>
+                            <th>Proveedor</th>
+                            <th>Recurso</th>
+                            <th>Horas</th>
+                            <th>Fecha inicio</th>
+                            <th>Fecha fin</th>
+                            <th>Horas reportadas</th>
+                            <th>Horas ausencias</th>
+                            <th>Horas laborales</th>
+                            <th>Horas pendientes por reportar</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="item : ${resultado}">
+                            <td th:text="${item.proyecto}"></td>
+                            <td th:text="${item.tarea}"></td>
+                            <td th:text="${item.proveedor}"></td>
+                            <td th:text="${item.recurso}"></td>
+                            <td th:text="${item.horas}"></td>
+                            <td th:text="${#dates.format(item.fechainicio, 'dd/MM/yyyy')}"></td>
+                            <td th:text="${#dates.format(item.fechafin, 'dd/MM/yyyy')}"></td>
+                            <td th:text="${item.horasreportadas}"></td>
+                            <td th:text="${item.horasausencias}"></td>
+                            <td th:text="${item.horaslaborales}"></td>
+                            <td th:text="${item.horaspendientes}"></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div th:if="${modelo.codreporte == 4}" class="table-responsive">
+                <table
+                    class="table table-striped table-sm table-bordered table-hover cl-tabla">
+                    <thead class="thead-light text-center">
+                        <tr>
+                            <th>Proyecto</th>
+                            <th>Tarea</th>
+                            <th>Proveedor</th>
+                            <th>Recurso</th>
+                            <th>Horas</th>
+                            <th>Actividades</th>
+                            <th>Fecha inicio</th>
+                            <th>Fecha fin</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="item : ${resultado}">
+                            <td th:text="${item.proyecto}"></td>
+                            <td th:text="${item.tarea}"></td>
+                            <td th:text="${item.proveedor}"></td>
+                            <td th:text="${item.recurso}"></td>
+                            <td th:text="${item.horas}"></td>
+                            <td th:text="${item.descripcion}"></td>
+                            <td th:text="${#dates.format(item.fechainicio, 'dd/MM/yyyy')}"></td>
+                            <td th:text="${#dates.format(item.fechafin, 'dd/MM/yyyy')}"></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div th:if="${modelo.codreporte == 5}" class="table-responsive">
+                <table
+                    class="table table-striped table-sm table-bordered table-hover cl-tabla">
+                    <thead class="thead-light text-center">
+                        <tr>
+                            <th>Fecha</th>
+                            <th>Cod Proyecto</th>
+                            <th>ID Proyecto</th>
+                            <th>PEP</th>
+                            <th>Proyecto</th>
+                            <th>Proveedor</th>
+                            <th>Perfil</th>
+                            <th>ID Recurso</th>
+                            <th>Recurso</th>
+                            <th>Costo</th>
+                            <th>Fecha Ingreso</th>
+                            <th>Horas</th>
+                            <th>Horas en Estructura</th>
+                            <th>Porcentaje Proyecto</th>
+                            <th>Horas con estructura</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="item : ${resultado}">
+                            <td th:text="${item.fecha}"></td>
+                            <td th:text="${item.idProyecto}"></td>
+                            <td th:text="${item.codproyecto}"></td>
+                            <td th:text="${item.pep}"></td>
+                            <td th:text="${item.proyecto}"></td>
+                            <td th:text="${item.proveedor}"></td>
+                            <td th:text="${item.perfil}"></td>
+                            <td th:text="${item.idrecurso}"></td>
+                            <td th:text="${item.recurso}"></td>
+                            <td th:text="${item.costo}"></td>
+                            <td th:text="${#dates.format(item.fechaingreso, 'dd/MM/yyyy')}"></td>
+                            <td th:text="${item.horas}"></td>
+                            <td th:text="${item.horaEnEstructura}"></td>
+                            <td th:text="${item.porcentajeProyecto}"></td>
+                            <td th:text="${item.horaConEstructura}"></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div th:if="${modelo.codreporte == 6}" class="table-responsive">
+                <table
+                    class="table table-striped table-sm table-bordered table-hover cl-tabla">
+                    <thead class="thead-light text-center">
+                        <tr>
+                            <th>Fecha</th>
+                            <th>Proyecto</th>
+                            <th>Proveedor</th>
+                            <th>Perfil</th>
+                            <th>ID Recurso</th>
+                            <th>Recurso</th>
+                            <th>Horas sin Estructura</th>
+                            <th>Costo sin Estructura</th>
+                            <th>Horas con Estructura</th>
+                            <th>Costo con Estructura</th>
+                            <th>Porcentaje Horas</th>
+                            <th>Porcentaje Costo</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="item : ${resultado}">
+                            <td th:text="${item.fecha}"></td>
+                            <td th:text="${item.proyecto}"></td>
+                            <td th:text="${item.proveedor}"></td>
+                            <td th:text="${item.perfil}"></td>
+                            <td th:text="${item.idRecurso}"></td>
+                            <td th:text="${item.recurso}"></td>
+                            <td th:text="${item.horasSinEstructura}"></td>
+                            <td th:text="${item.costoSinEstructura}"></td>
+                            <td th:text="${item.horasConEstructura}"></td>
+                            <td th:text="${item.costoConEstructura}"></td>
+                            <td th:text="${item.porcentajeHoras}"></td>
+                            <td th:text="${item.porcentajeCosto}"></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div th:if="${modelo.codreporte == 7}" class="table-responsive">
+                <table
+                    class="table table-striped table-sm table-bordered table-hover cl-tabla">
+                    <thead class="thead-light text-center">
+                        <tr>
+                            <th>Proyecto</th>
+                            <th>Proveedor</th>
+                            <th>Perfil</th>
+                            <th>ID Recurso</th>
+                            <th>Recurso</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="item : ${resultado}">
+                            <td th:text="${item.proyecto}"></td>
+                            <td th:text="${item.proveedor}"></td>
+                            <td th:text="${item.perfil}"></td>
+                            <td th:text="${item.idRecurso}"></td>
+                            <td th:text="${item.recurso}"></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div th:if="${modelo.codreporte == 8}" class="table-responsive">
+                <table
+                    class="table table-striped table-sm table-bordered table-hover cl-tabla">
+                    <thead class="thead-light text-center">
+                        <tr>
+                            <th>Fecha</th>
+                            <th>Proyecto</th>
+                            <th>Presupuesto</th>
+                            <th>Proveedor</th>
+                            <th>Perfil</th>
+                            <th>ID Recurso</th>
+                            <th>Recurso</th>
+                            <th>Horas sin Estructura</th>
+                            <th>Costo sin Estructura</th>
+                            <th>Horas con Estructura</th>
+                            <th>Costo con Estructura</th>
+                            <th>Prorrateo</th>
+                            <th>Presupuesto Disponible</th>
+                            <th>Presupuesto Consumido</th>
+                            <th>Porcentaje Horas</th>
+                            <th>Porcentaje Costo</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="item : ${resultado}">
+                            <td th:text="${item.fecha}"></td>
+                            <td th:text="${item.proyecto}"></td>
+                            <td th:text="${item.presupuesto}"></td>
+                            <td th:text="${item.proveedor}"></td>
+                            <td th:text="${item.perfil}"></td>
+                            <td th:text="${item.idRecurso}"></td>
+                            <td th:text="${item.recurso}"></td>
+                            <td th:text="${item.horasSinEstructura}"></td>
+                            <td th:text="${item.costoSinEstructura}"></td>
+                            <td th:text="${item.horasConEstructura}"></td>
+                            <td th:text="${item.costoConEstructura}"></td>
+                            <td th:text="${item.prorrateo}"></td>
+                            <td th:text="${item.presupuestoDisponible}"></td>
+                            <td th:text="${item.presupuestoConsumido}"></td>
+                            <td th:text="${item.porcentajeHoras}"></td>
+                            <td th:text="${item.porcentajeCosto}"></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div th:if="${modelo.codreporte == 9}" class="table-responsive">
+                <table
+                    class="table table-striped table-sm table-bordered table-hover cl-tabla">
+                    <thead class="thead-light text-center">
+                        <tr>
+                            <th>Titulo Proyecto</th>
+                            <th>Gerente</th>
+                            <th>Descripción Tarea</th>
+                            <th>Proveedor</th>
+                            <th>Perfil</th>
+                            <th>ID Recurso</th>
+                            <th>Recurso</th>
+                            <th>Horas</th>
+                            <th>Porcentaje Proyecto</th>
+                            <th>Horas con Estructura</th>
+                            <th>Lider</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="item : ${resultado}">
+                            <td th:text="${item.proyecto}"></td>
+                            <td th:text="${item.gerente}"></td>
+                            <td th:text="${item.descripcionTarea}"></td>
+                            <td th:text="${item.proveedor}"></td>
+                            <td th:text="${item.perfil}"></td>
+                            <td th:text="${item.idRecurso}"></td>
+                            <td th:text="${item.recurso}"></td>
+                            <td th:text="${item.horas}"></td>
+                            <td th:text="${item.porcentajeEnProyecto}"></td>
+                            <td th:text="${item.horasConEstructura}"></td>
+                            <td th:text="${item.doliente}"></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div th:if="${modelo.codreporte == 10}" class="table-responsive">
+                <table
+                    class="table table-striped table-sm table-bordered table-hover cl-tabla">
+                    <thead class="thead-light text-center">
+                        <tr>
+                            <th>Titulo Proyecto</th>
+                            <th>Proveedor</th>
+                            <th>Perfil</th>
+                            <th>Modalidad</th>
+                            <th>Recurso</th>
+                            <th>Prorrateo por Recurso</th>
+                            <th>Horas Directas</th>
+                            <th>Horas en Estructura</th>
+                            <th>Horas OPEX</th>
+                            <th>Cobro Proyecto</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="item : ${resultado}">
+                            <td th:text="${item.proyecto}"></td>
+                            <td th:text="${item.proveedor}"></td>
+                            <td th:text="${item.perfil}"></td>
+                            <td th:if="${item.modalidad == 0}">CAPEX</td>
+                            <td th:if="${item.modalidad > 0}">OPEX</td>
+                            <td th:text="${item.recurso}"></td>
+                            <td th:text="${item.prorrateoPorRecurso}"></td>
+                            <td th:text="${item.horasDirectas}"></td>
+                            <td th:text="${item.horasEnEstructura}"></td>
+                            <td th:text="${item.horasOpex}"></td>
+                            <td th:text="${item.cobroProyecto}"></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div th:if="${modelo.codreporte == 2}" class="table-responsive">
+                <table
+                    class="table table-striped table-sm table-bordered table-hover cl-tabla">
+                    <thead class="thead-light text-center">
+                        <tr>
+                            <th>Id Proyecto</th>
+                            <th>Proyecto</th>
+                            <th>Proveedor</th>
+                            <th>Id recurso</th>
+                            <th>Recurso</th>
+                            <th>Perfil</th>
+                            <th>Actividades</th>
+                            <th>Horas</th>
+                            <th>Horas laborales</th>
+                            <th>Horas ausencias</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="item : ${resultado}">
+                            <td th:text="${item.idproyecto}"></td>
+                            <td th:text="${item.proyecto}"></td>
+                            <td th:text="${item.proveedor}"></td>
+                            <td th:text="${item.idrecurso}"></td>
+                            <td th:text="${item.recurso}"></td>
+                            <td th:text="${item.perfil}"></td>
+                            <td th:text="${item.descripcion}"></td>
+                            <td th:text="${item.horas}"></td>
+                            <td th:text="${item.horaslaborales}"></td>
+                            <td th:text="${item.horasausencias}"></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div th:if="${modelo.codreporte == 12}" class="table-responsive">
+                <table
+                    class="table table-striped table-sm table-bordered table-hover cl-tabla">
+                    <thead class="thead-light text-center">
+                        <tr>
+                            <th>Id</th>
+                            <th>Recurso</th>
+                            <th>Id Recurso</th>
+                            <th>Proveedor</th>
+                            <th>Tipo Presupuesto</th>
+                            <th>Id Proyecto</th>
+                            <th>Pep</th>
+                            <th>Nombre AMX</th>
+                            <th>Con Presupuesto</th>
+                            <th>Tipo Proyecto</th>
+                            <th>Proyecto</th>
+                            <th>Fecha</th>
+                            <th>Semana</th>
+                            <th>Procentaje Proyecto</th>
+                            <th>Costos Recursos Mes</th>
+                            <th>Costos Por Pagar</th>
+                            <th>Gerente</th>
+                            <th>Aprobador</th>
+                            <th>Celula</th>
+                        </tr>
+
+                    </thead>
+                    <tbody>
+                        <tr th:each="item : ${resultado}">
+                            <td th:text="${item.id}"></td>
+                            <td th:text="${item.recurso}"></td>
+                            <td th:text="${item.idRecurso}"></td>
+                            <td th:text="${item.proveedor}"></td>
+                            <td th:text="${item.tipoPresupuesto}"></td>
+                            <td th:text="${item.IdProyecto}"></td>
+                            <td th:text="${item.pep}"></td>
+                            <td th:text="${item.nombreAmx}"></td>
+                            <td th:text="${item.conPresupuesto}"></td>
+                            <td th:text="${item.tipoProyecto}"></td>
+                            <td th:text="${item.proyecto}"></td>
+                            <td th:text="${item.fecha}"></td>
+                            <td th:text="${item.semana}"></td>
+                            <td th:text="${item.porcentajeProyecto}"></td>
+                            <td th:text="${item.costoRecursos}"></td>
+                            <td th:text="${item.costoxPagar}"></td>
+                            <td th:text="${item.gerente}"></td>
+                            <td th:text="${item.aprobador}"></td>
+                            <td th:text="${item.celula}"></td>
+
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div th:if="${modelo.codreporte == 13}" class="table-responsive">
+                <table
+                    class="table table-striped table-sm table-bordered table-hover cl-tabla">
+                    <thead class="thead-light text-center">
+                        <tr>
+                            <th>Id</th>
+                            <th>Codigo Empleado</th>
+                            <th>Codigo Persona</th>
+                            <th>Nombre</th>
+                            <th>Codigo Tipo Documento</th>
+                            <th>Tipo Documento</th>
+                            <th>Numero Documento</th>
+                            <th>Primer Nombre</th>
+                            <th>Segundo Nombre</th>
+                            <th>Primer Apellido</th>
+                            <th>Segundo Apellido</th>
+                            <th>Telefono</th>
+                            <th>Correo</th>
+                            <th>Direccion Residencia</th>
+                            <th>Tipo Genero</th>
+                            <th>Genero</th>
+                            <th>Fecha Nacimiento</th>
+                            <th>Codigo Perfil</th>
+                            <th>Perfil</th>
+                            <th>Codigo Perfil tipo</th>
+                            <th>Pefil Tipo</th>
+                            <th>Codigo Linea Producto</th>
+                            <th>Linea Producto</th>
+                            <th>Codigo Proveedor</th>
+                            <th>Proveedor</th>
+                            <th>Codigo Perfil Nivel</th>
+                            <th>Perfil NIvel</th>
+                            <th>Usuario Claro</th>
+                            <th>Fecha Inicio</th>
+                            <th>Fecha Fin</th>
+                            <th>Codigo Estructural Organizacinal</th>
+                            <th>Estructura Organizacional</th>
+                            <th>Rol</th>
+                            <th>Codigo Modalidad</th>
+                            <th>Celula</th>
+                            <th>Valor</th>
+                        </tr>
+
+                    </thead>
+                    <tbody>
+                        <tr th:each="item : ${resultado}">
+                            <td th:text="${item.id}"></td>
+                            <td th:text="${item.codEmpleado}"></td>
+                            <td th:text="${item.codPersona}"></td>
+                            <td th:text="${item.nombre}"></td>
+                            <td th:text="${item.codTipoDocumento}"></td>
+                            <td th:text="${item.tipoDocumento}"></td>
+                            <td th:text="${item.numeroDocumento}"></td>
+                            <td th:text="${item.primerNombre}"></td>
+                            <td th:text="${item.segundoNombre}"></td>
+                            <td th:text="${item.primerApellido}"></td>
+                            <td th:text="${item.segungoApellido}"></td>
+                            <td th:text="${item.telefono}"></td>
+                            <td th:text="${item.correo}"></td>
+                            <td th:text="${item.direccionResidencia}"></td>
+                            <td th:text="${item.tipoGenero}"></td>
+                            <td th:text="${item.genero}"></td>
+                            <td th:text="${item.fechaNacimiento}"></td>
+                            <td th:text="${item.codPerfil}"></td>
+                            <td th:text="${item.perfil}"></td>
+                            <td th:text="${item.codPerfilTipo}"></td>
+                            <td th:text="${item.perfilTipo}"></td>
+                            <td th:text="${item.codLineaProducto}"></td>
+                            <td th:text="${item.lineaProducto}"></td>
+                            <td th:text="${item.codProveedor}"></td>
+                            <td th:text="${item.proveedor}"></td>
+                            <td th:text="${item.codPerfilNivel}"></td>
+                            <td th:text="${item.perfilNivel}"></td>
+                            <td th:text="${item.usuarioClaro}"></td>
+                            <td th:text="${item.fechaInicio}"></td>
+                            <td th:text="${item.fechaFin}"></td>
+                            <td th:text="${item.codEstructuraOrganizacional}"></td>
+                            <td th:text="${item.estructuraOrganizacional}"></td>
+                            <td th:text="${item.rol}"></td>
+                            <td th:text="${item.codModalidad}"></td>
+                            <td th:text="${item.celula}"></td>
+                            <td th:text="${item.valor}"></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div th:if="${modelo.codreporte == 14}" class="table-responsive">
+                <table
+                    class="table table-striped table-sm table-bordered table-hover cl-tabla">
+                    <thead class="thead-light text-center">
+                        <tr>
+                            <th>Id</th>
+                            <th>Codigo Proyecto</th>
+                            <th>Proyecto</th>
+                            <th>Nombre Amx</th>
+                            <th>Id Proyecto</th>
+                            <th>Codigo Perfil</th>
+                            <th>Perfil</th>
+                            <th>Codigo Nivel Perfil</th>
+                            <th>Perfil Nivel</th>
+                            <th>Codigo Perfil Tipo</th>
+                            <th>Perfil Tipo</th>
+                            <th>Codigo Proveedor</th>
+                            <th>Proveedor</th>
+                            <th>Codigo Empleado</th>
+                            <th>Celula</th>
+                            <th>Id Brief</th>
+                            <th>Id Linea</th>
+                            <th>Linea Producto</th>
+                            <th>Linea_Producto</th>
+                            <th>Descripcion Linea</th>
+                            <th>Fase</th>
+                            <th>Id Cambio</th>
+                            <th>Estado</th>
+                            <th>Resultado del Cambio</th>
+                            <th>Justificacion</th>
+                            <th>PM</th>
+                            <th>LT</th>
+                            <th>Fecha Solicitud</th>
+                            <th>Fecha Inicio Proceso</th>
+                            <th>Fecha Entrega</th>
+                            <th>Fecha Despliegue Planeada</th>
+                            <th>Fecha Despliegue Real</th>
+                            <th>Horas HL</th>
+                            <th>Horas LL</th>
+                            <th>Horas Real</th>
+                            <th>Fecha Presupuesto</th>
+                            <th>Fecha QA Ini</th>
+                            <th>Fecha QA Fin</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="item : ${resultado}">
+                            <td th:text="${item.id}"></td>
+                            <td th:text="${item.codProyecto}"></td>
+                            <td th:text="${item.proyecto}"></td>
+                            <td th:text="${item.nombre_amx}"></td>
+                            <td th:text="${item.idProyecto}"></td>
+                            <td th:text="${item.codPerfil}"></td>
+                            <td th:text="${item.perfil}"></td>
+                            <td th:text="${item.codPerfilNivel}"></td>
+                            <td th:text="${item.perfilNivel}"></td>
+                            <td th:text="${item.codPerfilTipo}"></td>
+                            <td th:text="${item.perfilTipo}"></td>
+                            <td th:text="${item.codProveedor}"></td>
+                            <td th:text="${item.proveedor}"></td>
+                            <td th:text="${item.codEmpleado}"></td>
+                            <td th:text="${item.celula}"></td>
+                            <td th:text="${item.idBrief}"></td>
+                            <td th:text="${item.idLinea}"></td>
+                            <td th:text="${item.lineaProducto}"></td>
+                            <td th:text="${item.linea_Producto}"></td>
+                            <td th:text="${item.descripcionLinea}"></td>
+                            <td th:text="${item.fase}"></td>
+                            <td th:text="${item.idCambio}"></td>
+                            <td th:text="${item.estado}"></td>
+                            <td th:text="${item.resultadoDelCambio}"></td>
+                            <td th:text="${item.justificacion}"></td>
+                            <td th:text="${item.pm}"></td>
+                            <td th:text="${item.lt}"></td>
+                            <td th:text="${item.fechaSolicitud}"></td>
+                            <td th:text="${item.fechaInicioProceso}"></td>
+                            <td th:text="${item.fechaEntrega}"></td>
+                            <td th:text="${item.fechaDesplieguePlaneada}"></td>
+                            <td th:text="${item.fechaDespliegueReal}"></td>
+                            <td th:text="${item.horas_Hl}"></td>
+                            <td th:text="${item.horas_Ll}"></td>
+                            <td th:text="${item.horas_Real}"></td>
+                            <td th:text="${item.fecha_Presupuesto}"></td>
+                            <td th:text="${item.fechaQAIni}"></td>
+                            <td th:text="${item.fechaQAFin}"></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+
+    </body>
+</html>

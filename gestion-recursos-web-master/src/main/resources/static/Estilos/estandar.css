@@ -1,0 +1,44 @@
+/********** Formularios **********/
+
+form.validate input.error, form.validate select.error { border-color: #ffb8b0; background-color: #fdf5f6; }
+form.validate label.error { color: #bf4545; }
+form.validate input.form-control:focus { box-shadow: none; }
+form.validate input.form-control, form.validate select.form-control { box-shadow: none; transition: border-color .5s ease-out; }
+form.validate input:required:valid, form.validate select:required:valid {border-left: 3px solid; border-left-color: green; }
+form.validate input:invalid, form.validate select:invalid { border-left: 3px solid; border-left-color: #ffb8b0; }
+
+
+/********** Menú **********/
+.cl-btn-menu-abrir-cerrar { position: fixed; top: 48px; left: 175px; transition: left .3s; backgroud-color: #e9ecef; }
+.cl-btn-menu-abrir-cerrar:focus { box-shadow: 0 0 0 0rem rgba(0,0,0,0); }
+.cl-menu-lateral { height: calc(100vh - 48px); width: 220px; position: fixed; z-index: 1; top: 0; left: 0; overflow-x: hidden; margin-top: 48px; background-color: #e9ecef; padding-top: 30px; transition: width .3s; }
+.cl-menu-lateral.cl-menu-cerrado { width: 60px; }
+.cl-menu-lateral.cl-menu-cerrado .cl-btn-menu-abrir-cerrar { left: 5px; }
+.cl-menu-lateral.cl-menu-cerrado a span { display:none; }
+@media screen and (max-height: 450px) { .sidenav { padding-top: 15px; } }
+.cl-menu a { color: #5d5b5b; }
+.cl-menu .cl-submenu { margin-left: 15px; }
+.cl-menu .cl-menu-activo { color: #17a2b8; font-weight: bold; }
+.cl-menu a.nav-link { padding: 0.2rem 1rem; }
+
+/********** Contenedor principal ***********/
+.cl-contenedor-principal { transition: margin-left .3s; margin-left: 220px; margin-top: 55px; padding-left: 15px; padding-right: 15px; overflow-x: hidden; }
+.cl-contenedor-principal.cl-menu-cerrado { margin-left: 60px; }
+
+/********** Utilidades **********/
+.separador-5 { height: 5px; }
+.separador-10 { height: 10px; display: block; }
+.separador-20 { height: 20px; }
+.separador-30 { height: 30px; }
+.separador-40 { height: 40px; }
+.separador-50 { height: 50px; }
+.clear { display: block; }
+.divider { background-color: #e5e5e5; height: 1px; }
+.text-error span { color: #bf4545; }
+
+/********** Tablas de Filtro ***********/
+table.dataTable tbody th, table.dataTable tbody td { padding: 2px 8px; }
+
+
+/**************** Reportes ****************/
+.cl-seccion-reportes .table { font-size: 12px; }

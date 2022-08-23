@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html layout:decorate="~{Layout}">
+	<head>
+		<title>Proveedores</title>
+	</head>
+	<body>	
+		<th:block layout:fragment="estilos">
+			<link href="/Complementos/DataTables/datatables.min.css" rel="stylesheet"/>
+		</th:block>
+		<th:block layout:fragment="scripts">
+			<script type="text/javascript" src="/Complementos/DataTables/datatables.min.js" rel="stylesheet"></script>
+			<script type="text/javascript" src="/Scripts/cl-tablas.js"></script>
+		</th:block>
+		
+		
+		<div layout:fragment="content">
+			<div class="table-responsive">
+			    <table class="table table-striped table-sm table-bordered table-hover cl-tabla">
+				    <thead class="thead-light text-center">
+				        <tr>
+				        	<th>Ver</th>
+				        	<th>Nombre</th>
+				            <th>Nit</th>
+				            <th>Marco</th>
+				            <th>Especialidad</th>
+				            <th>Línea</th>
+				        </tr>
+				    </thead>
+				    <tbody>
+				        <tr th:each="item : ${modelo}">
+				        	<td align="center">
+				        		<a href="#" th:attr="href='/Proveedor/Editar/'+${item.id}" class="btn btn-warning">Editar</a>
+				        	</td>
+				        	<td>
+				        		<span th:text="${item.nombre}"></span>
+				        	</td>
+				            <td>
+				            	<span th:text="${item.nit}"></span>
+				            </td>
+				            <td>
+				        		<span th:text="${item.contratomarco}"></span>
+				        	</td>
+				            <td>
+				        		<span th:text="${item.especialidad}"></span>
+				        	</td>
+				        	<td>
+				        		<span th:text="${item.linea}"></span>
+				        	</td>
+				        </tr>
+				    </tbody>
+				</table>    
+			</div>
+		</div>
+	</body>
+</html>

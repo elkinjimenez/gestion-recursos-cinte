@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html layout:decorate="~{Layout}"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+>
+<th:block layout:fragment="estilos">
+    <link href="/Complementos/DataTables/datatables.min.css" rel="stylesheet"/>
+</th:block>
+<th:block layout:fragment="scripts">
+    <script type="text/javascript" src="/Complementos/DataTables/datatables.min.js" rel="stylesheet"></script>
+    <script type="text/javascript" src="/Scripts/cl-tablas.js"></script>
+
+</th:block>
+
+<div layout:fragment="content">
+    <div class="table-responsive">
+        <table class="table table-striped table-sm table-bordered table-hover cl-tabla">
+            <thead class="thead-light text-center">
+            <tr>
+                <th>Ver</th>
+                <th>Cod Cambio</th>
+                <th>Fecha TCBA</th>
+                <th>Fecha PAP</th>
+                <th>Resumen</th>
+                <th>ID_RLP</th>
+                <th>Tipo Linea</th>
+                <th>Estado</th>
+                <th>Id Compromiso</th>
+            </tr>
+            </thead>
+            <tbody>
+                <tr th:each="cambio : ${modelo}">
+                    <td class="text-center">
+                        <a href="#" th:attr="href='/Cambios/Editar/'+${cambio.id}"
+                           class="btn btn-warning">Editar</a>
+                    </td>
+                    <td>
+                        <span th:text="${cambio.codCambio}"></span>    
+                    </td>
+                    <td>
+                        <span th:text="${#dates.format(cambio.fechaTcba, 'dd/MM/yyyy')}"></span>    
+                    </td>
+                    <td>
+                        
+                        <span th:text="${#dates.format(cambio.fechaPap, 'dd/MM/yyyy')}"></span>    
+                    </td>
+
+                    <td>
+                        <span th:text="${cambio.resumen}"></span>    
+                    </td>
+                    <td>
+                        <span th:text="${cambio.idRlp}"></span>    
+                    </td>
+                    <td>
+                        <span th:text="${cambio.tipoLinea}"></span>    
+                    </td>
+                    <td>
+                        <span th:text="${cambio.estado}"></span>    
+                    </td> 
+                    <td>
+                        <span th:text="${cambio.idCompromiso}"></span>    
+                    </td>
+
+                </tr>
+                
+            </tbody>
+        </table>
+    </div>
+    
+</div>
+
+</html>

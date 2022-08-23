@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html layout:decorate="~{Layout}">
+<head>
+    <title>Gerencia</title>
+</head>
+<body>
+
+<th:block layout:fragment="scripts">
+    <script type="text/javascript" src="/Scripts/Hextra.js"></script>
+</th:block>
+<div layout:fragment="content">
+    <span id="evidencia-error" class="d-none"></span>
+    <div id="success-message" th:insert="MensajesFormulario.html :: mensajes_formulario"> </div>
+
+    <form id="formHoraExtra" class="validate" action="/Usuario" th:attr="action=${cl_formulario_url}" method="post">
+        <div class="row" th:object="${modelo}">
+            <input type="hidden" th:field="*{id}"/>
+
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label>Tipo Extra</label>
+                    <input class="form-control" name="tipoExtra" type="text" th:field="*{tipoExtra}" required/>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label>Condicion</label>
+                    <input class="form-control" name="condicion" type="text" th:field="*{condicion}"/>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label>Nivel Aprobador </label>
+                    <input class="form-control" name="nivelAprobador" type="number" th:field="*{nivelAprobador}"
+                           required/>
+                </div>
+            </div>
+
+
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label>Multiplicador </label>
+                    <input class="form-control" name="multiplicador" type="text" pattern="/^(\d+(?:[\.\,]\d{2})?)$/"  th:field="*{multiplicador}"
+                           required/>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label>Hora Inicial</label>
+                    <input type="text" class="form-control cl-datetime-picker"  required th:id="Hini" th:name="Hini" autocomplete="off" th:value="${modelo.Hini}?${#dates.format(modelo.Hini, 'dd/MM/yyyy HH:mm')}:''" maxlength="20"/>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label>Hora Final</label>
+                    <input type="text" class="form-control cl-datetime-picker" required th:id="Hfin" th:name="Hfin" autocomplete="off" th:value="${modelo.Hfin}?${#dates.format(modelo.Hfin, 'dd/MM/yyyy HH:mm')}:''" maxlength="20"/>
+                </div>
+            </div>
+
+
+            <div class="col-12">
+                <div class="form-group text-center">
+                    <div class="separador-30"></div>
+                    <input type="button" class="btn btn-info" value="Guardar" onclick="validarHoraInicioyfin()"/>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+</body>
+</html>

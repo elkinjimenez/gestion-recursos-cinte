@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html layout:decorate="~{Layout}" 
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <title>Proyectos</title>
+    </head>
+    <body>
+        <div layout:fragment="content">
+
+            <div th:insert="MensajesFormulario.html :: mensajes_formulario"> </div>
+            <div th:if="${error != null}" class="alert alert-danger">
+                <div th:text="${error}"></div>
+            </div>
+            <form class="validate" action="/Usuario" th:attr="action=${cl_formulario_url}" th:object="${modelo}" method="post">
+                <div class="row" th:if="${datos_cargados}">
+                    <input type="hidden" th:field="*{id}" />
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label>Tipo</label>
+                            <select class="form-control cl-select-picker" data-live-search="true" required th:field="*{codproyectotipo}" data-rule-min="1" data-msg-min="Debe seleccionar una opción">
+                                <option value="0">Seleccione...</option>
+                                <option th:each="item : ${proyectoTipos}" th:value="${item.id}" th:text="${item.nombre}"></option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label>Presupuesto</label>
+                            <select class="form-control cl-select-picker" data-live-search="true" th:field="*{codpresupuesto.id}"  required data-rule-min="1" data-msg-min="Debe seleccionar una opción">
+                                <option value="0">Seleccione...</option>
+                                <option th:each="item : ${presupuestos}" th:value="${item.id}" th:text="${item.elemento_pep}"></option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label>Código</label>
+                            <input class="form-control" type="text" required th:field="*{codigoproyecto}" maxlength="50"/>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label>Nombre</label>
+                            <input class="form-control" type="text" required th:field="*{nombre}" maxlength="200"/>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label>Fecha inicio</label>
+                            <input type="text" class="form-control cl-date-picker" required th:id="fechainicio" th:name="fechainicio" autocomplete="off" th:value="${modelo.fechainicio}?${#dates.format(modelo.fechainicio, 'dd/MM/yyyy')}:''" maxlength="10"/>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label>Fecha fin</label>
+                            <input type="text" class="form-control cl-date-picker" required th:id="fechafin" th:name="fechafin" autocomplete="off" th:value="${modelo.fechafin}?${#dates.format(modelo.fechafin, 'dd/MM/yyyy')}:''" maxlength="10"/>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label>&nbsp;</label>
+                            <div class="separador-10"></div>
+                            <input type="checkbox" th:field="*{prioritario}" />&nbsp;
+                            <label for="prioritario1">Prioritario</label>
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label>Descripción</label>
+                            <textarea class="form-control" th:field="*{descripcion}" maxlength="1000" rows="5"></textarea>
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <div class="form-group text-center">
+                            <div class="separador-30"></div>
+                            <input type="submit" class="btn btn-info" value="Guardar"/>
+                        </div>
+                    </div>
+                </div>
+                <div class="row" th:if="${!datos_cargados}">
+                    <div class="col-md-12">
+                        <span><h3>No se cargaron todos los combos del formulario </h3></span><
+                    </div>
+                </div>
+            </form>
+        </div>
+    </body>
+</html>

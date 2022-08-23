@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html layout:decorate="~{Layout}">
+	<head>
+		<title>Proveedor</title>
+	</head>
+	<body>
+		<div layout:fragment="content">
+		
+			<div th:insert="MensajesFormulario.html :: mensajes_formulario"> </div>
+		
+		    <form class="validate" action="/Usuario" th:attr="action=${cl_formulario_url}" th:object="${modelo}" method="post">
+		    	<div class="row">
+			    	<input type="hidden" th:field="*{id}" />
+			    	<input type="hidden" value="A" th:field="*{estado}" />
+			    	<div class="col-md-3">
+				    	<div class="form-group">
+				    		<label>Nit</label>
+				    		<input class="form-control" type="text" th:field="*{nit}" maxlength="20"/>
+				    	</div>
+			    	</div>
+			    	<div class="col-md-3">
+				    	<div class="form-group">
+				    		<label>Nombre</label>
+				    		<input class="form-control" type="text" required th:field="*{nombre}" maxlength="200"/>
+				    	</div>
+			    	</div>
+			    	<div class="col-md-3">
+				    	<div class="form-group">
+				    		<label>Contrato marco</label>
+				    		<input class="form-control" type="text" th:field="*{contratomarco}" maxlength="50"/>
+				    	</div>
+			    	</div>
+			    	<div class="col-md-3">
+				    	<div class="form-group">
+				    		<label>Especialidad</label>
+				    		<input class="form-control" type="text" th:field="*{especialidad}" maxlength="50"/>
+				    	</div>
+			    	</div>
+			    	<div class="col-md-3">
+				    	<div class="form-group">
+				    		<label>Línea</label>
+				    		<input class="form-control" type="text" th:field="*{linea}" maxlength="50"/>
+				    	</div>
+			    	</div>
+			    	<div class="col-md-3">
+			    		<div class="form-group">
+			    			<label>País</label>
+			    			<select class="form-control" required th:field="*{pais}">
+			    				<option value="Colombia">Colombia</option>
+		    				</select>
+			    		</div>
+			    	</div>
+			    	<div class="col-md-3">
+			    		<div class="form-group">
+			    			<label>Departamento</label>
+			    			<select class="form-control cl-select-picker" data-live-search="true" th:field="*{departamento}">
+			    				<option value="Cundinamarca">Cundinamarca</option>
+			    				<option value="Amazonas">Amazonas</option>
+								<option value="Antioquia">Antioquia</option>
+								<option value="Arauca">Arauca</option>
+								<option value="Atlántico">Atlántico</option>
+								<option value="Bolívar">Bolívar</option> 
+								<option value="Boyacá">Boyacá</option>
+								<option value="Caldas">Caldas</option>
+								<option value="Caquetá">Caquetá</option>
+								<option value="Casanare">Casanare</option>
+								<option value="Cauca">Cauca</option>
+								<option value="Cesar">Cesar</option>
+								<option value="Chocó">Chocó</option>
+								<option value="Córdoba">Córdoba</option>
+								<option value="Guainía">Guainía</option>
+								<option value="Guaviare">Guaviare</option>
+								<option value="Huila">Huila</option>
+								<option value="La Guajira">La Guajira</option>
+								<option value="Magdalena">Magdalena</option>
+								<option value="Meta">Meta</option>
+								<option value="Nariño">Nariño</option>
+								<option value="Norte">Norte de Santander</option>
+								<option value="Putumayo">Putumayo</option>
+								<option value="Quindío">Quindío</option>
+								<option value="Risaralda">Risaralda</option>
+								<option value="San">San Andrés y Providencia</option>
+								<option value="Santander">Santander</option>
+								<option value="Sucre">Sucre</option>
+								<option value="Tolima">Tolima</option>
+								<option value="Valle">Valle del Cauca</option>
+								<option value="Vaupés">Vaupés</option>
+								<option value="Vichada">Vichada</option>
+		    				</select>
+			    		</div>
+			    	</div>
+			    	<div class="col-md-3">
+			    		<div class="form-group">
+			    			<label>Ciudad</label>
+			    			<select class="form-control cl-select-picker" data-live-search="true" th:field="*{ciudad}" >
+			    				<option value="Bogotá" selected>Bogotá</option>
+								<option value="Villavicencio">Villavicencio</option>
+								<option value="Medellín">Medellín</option>
+								<option value="Ibagué">Ibagué</option>
+								<option value="Cali">Cali</option>
+								<option value="Santa">Santa</option> Marta
+								<option value="Barranquilla">Barranquilla</option>
+								<option value="Valledupar">Valledupar</option>
+								<option value="Cartagena">Cartagena</option>
+								<option value="Manizales">Manizales</option>
+								<option value="Soacha">Soacha</option>
+								<option value="Pereira">Pereira</option>
+								<option value="Cúcuta">Cúcuta</option>
+								<option value="Montería">Montería</option>
+								<option value="Soledad">Soledad</option>
+								<option value="Neiva">Neiva</option>
+								<option value="Bucaramanga">Bucaramanga</option>
+								<option value="Pasto">Pasto</option>
+								<option value="Bello">Bello</option>
+		    				</select>
+			    		</div>
+			    	</div>
+			    	<div class="col-12">
+			    		<div class="form-group text-center">
+			    			<div class="separador-30"></div>
+			    			<input type="submit" class="btn btn-info" value="Guardar"/>
+			    		</div>
+			    	</div>
+		    	</div>
+		    </form>
+		</div>
+	</body>
+</html>

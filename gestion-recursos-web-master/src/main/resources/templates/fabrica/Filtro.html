@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html layout:decorate="~{Layout}">
+<head>
+    <title>Compromisos Fabrica</title>
+</head>
+<body>
+<th:block layout:fragment="estilos">
+    <link href="/Complementos/DataTables/datatables.min.css"
+          rel="stylesheet"/>
+</th:block>
+<th:block layout:fragment="scripts">
+    <script type="text/javascript"
+            src="/Complementos/DataTables/datatables.min.js" rel="stylesheet"></script>
+    <script type="text/javascript" src="/Scripts/cl-tablas.js"></script>
+    <script type="text/javascript">
+        $(function () {
+            function controlarCampoDesactivado(idCampo, desactivar) {
+                if (desactivar) {
+                    $("#" + idCampo).prop("disabled", true);
+                } else {
+                    $("#" + idCampo).removeAttr("disabled");
+                }
+            };
+
+            $("select#columnaUno").change(function () {
+                controlarCampoDesactivado("valorUno", !$(this).val());
+            });
+
+            $("select#columnaDos").change(function () {
+                controlarCampoDesactivado("valorDos", !$(this).val());
+            });
+
+            $("select#columnaTres").change(function () {
+                controlarCampoDesactivado("valorTres", !$(this).val());
+            });
+        });
+    </script>
+</th:block>
+
+<div layout:fragment="content">
+    <form class="validate" method="post" action="/Fabrica/Filtro?clm=adgcf"
+          th:object="${filtrosDto}">
+        <div class="row" th:if="${datos_cargados == true}">
+            <div class="col-sm-4">
+                <div class="form-group">
+                    <label>Filtro 1</label> <select id="columnaUno" th:field="*{columnaUno}"
+                                                    class="form-control cl-select-picker cl-reporte-filtro"
+                                                    data-live-search="true">
+                    <option value="">Seleccione un campo...</option>
+                    <option th:each="item : ${columnasFiltro}" th:value="${item.name}"
+                            th:text="${item.name}"></option>
+                </select>
+                </div>
+            </div>
+            <div class="col-sm-4">
+                <div class="form-group">
+                    <label>Filtro 2</label> <select id="columnaDos" th:field="*{columnaDos}"
+                                                    class="form-control cl-select-picker cl-reporte-filtro"
+                                                    data-live-search="true">
+                    <option value="">Seleccione un campo...</option>
+                    <option th:each="item : ${columnasFiltro}" th:value="${item.name}"
+                            th:text="${item.name}"></option>
+                </select>
+                </div>
+            </div>
+            <div class="col-sm-4">
+                <div class="form-group">
+                    <label>Filtro 3</label> <select id="columnaTres" th:field="*{columnaTres}"
+                                                    class="form-control cl-select-picker cl-reporte-filtro"
+                                                    data-live-search="true">
+                    <option value="">Seleccione un campo...</option>
+                    <option th:each="item : ${columnasFiltro}" th:value="${item.name}"
+                            th:text="${item.name}"></option>
+                </select>
+                </div>
+            </div>
+            <div class="col-sm-4">
+                <div class="form-group">
+                    <label>Valor Filtro 1</label>
+                    <input id="valorUno" th:field="*{valorUno}"
+                           type="text" class="form-control"
+                           autocomplete="off" th:disabled="${filtrosDto.columnaUno == null}"/>
+                </div>
+            </div>
+            <div class="col-sm-4">
+                <div class="form-group">
+                    <label>Valor Filtro 2</label>
+                    <input id="valorDos" th:field="*{valorDos}"
+                           type="text" class="form-control"
+                           autocomplete="off" th:disabled="${filtrosDto.columnaDos == null}"/>
+                </div>
+            </div>
+            <div class="col-sm-4">
+                <div class="form-group">
+                    <label>Valor Filtro 3</label>
+                    <input id="valorTres" th:field="*{valorTres}"
+                           type="text" class="form-control"
+                           autocomplete="off" th:disabled="${filtrosDto.columnaTres == null}"/>
+                </div>
+            </div>
+            <div class="col-sm-4">
+                <div class="form-group">
+                    <label>Estructura</label>
+                    <select class="form-control cl-select-picker cl-reporte-filtro" data-live-search="true"
+                            th:field="*{codestructuraorganizacional}">
+                        <option value="">Todos...</option>
+                        <option th:each="item : ${estructurasorganizacionales}" th:value="${item.id}"
+                                th:text="${item.nombre}"></option>
+                    </select>
+                </div>
+            </div>
+            <div class="col-sm-4">
+                <div class="form-group">
+                    <label>Proyecto</label> <select th:field="*{codproyecto}"
+                                                    class="form-control cl-select-picker cl-reporte-filtro"
+                                                    data-live-search="true">
+                    <option value="">Todos...</option>
+                    <option style="width:50px" th:each="item : ${proyectos}" th:value="${item.id}"
+                            th:text="${item.nombre}"></option>
+                </select>
+                </div>
+            </div>
+            <div class="col-sm-4">
+                <div class="form-group">
+                    <label>Proveedor</label> <select th:field="*{codproveedor}"
+                                                     class="form-control cl-select-picker cl-reporte-filtro"
+                                                     data-live-search="true" id>
+                    <option value="">Todos...</option>
+                    <option th:each="item : ${proveedores}" th:value="${item.id}"
+                            th:text="${item.nombre}"></option>
+                </select>
+                </div>
+            </div>
+            <div class="col-sm-4">
+                <div class="form-group">
+                    <label>Perfil</label>
+                    <select class="form-control cl-select-picker cl-reporte-filtro" data-live-search="true"
+                            th:field="*{codperfil}">
+                        <!--							<select class="form-control cl-select-picker" th:field="*{codperfil}">-->
+                        <option value="">Todos...</option>
+                        <option th:each="item : ${perfiles}" th:value="${item.id}" th:text="${item.nombre}"></option>
+                    </select>
+                </div>
+            </div>
+            <div class="col-sm-4">
+                <div class="form-group">
+                    <label>Perfil Tipo</label>
+                    <select class="form-control cl-select-picker cl-reporte-filtro" data-live-search="true"
+                            th:field="*{codperfiltipo}">
+                        <option value="">Todos...</option>
+                        <option th:each="item : ${perfiltipos}" th:value="${item.id}" th:text="${item.nombre}"></option>
+                    </select>
+                </div>
+            </div>
+            <div class="col-sm-4">
+                <div class="form-group">
+                    <label>Perfil Nivel</label>
+                    <select class="form-control cl-select-picker cl-reporte-filtro" data-live-search="true"
+                            th:field="*{codperfilnivel}">
+                        <option value="">Todos...</option>
+                        <option th:each="item : ${perfilniveles}" th:value="${item.id}"
+                                th:text="${item.nombre}"></option>
+                    </select>
+                </div>
+            </div>
+            <div class="col-sm-12 text-right">
+                <div class="form-group">
+                    <button type="submit" class="btn btn-info">
+                        <i class="fas fa-search"></i> Buscar
+                    </button>
+                    <div class="separador-30"></div>
+                </div>
+            </div>
+        </div>
+        <div class="row" th:if="${datos_cargados == false}">
+            <span><h3>No se cargaron los combos  del formulario </h3></span>
+        </div>
+    </form>
+
+    <div th:insert="MensajesFormulario.html :: mensajes_formulario"></div>
+
+    <div class="table-responsive">
+        <table
+                class="table table-striped table-sm table-bordered table-hover cl-tabla">
+            <thead class="thead-light text-center">
+            <tr>
+                <th>Acciones</th>
+                <th>Proyecto</th>
+                <th>Linea Producto</th>
+                <th>Brief</th>
+                <th>Id RLP</th>
+                <th>Id Cambio</th>
+                <th>Estado</th>
+                <th>Estructura</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="item : ${modelo}">
+                <td width="350" align="center">
+                    <div class="mt-1">
+                        <a href="#" th:attr="href='/Fabrica/Editar/'+${item.id}" class="btn btn-warning">Editar</a>
+                        <a href="#" th:attr="href='/Fabrica/RoadMap/'+${item.id}" class="btn btn-info">RoadMap</a>
+                        <a href="#"
+                           th:onclick="'javascript:confirmarEliminarSweetAlert(' + '`/Fabrica/Eliminar/' + ${item.id} + '`);'"
+                           class="btn btn-danger">Eliminar</a>
+                    </div>
+                </td>
+                <td><span th:text="${item.codProyecto}"></span></td>
+                <td><span th:text="${item.lineaProducto}"></span></td>
+                <td><span th:text="${item.brief}"></span></td>
+                <td><span th:text="${item.idRlp}"></span></td>
+                <td><span th:text="${item.idCambio}"></span></td>
+                <td><span th:text="${item.estado}"></span></td>
+                <td><span th:text="${item.nombreEstructura}"></span></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+</body>
+</html>

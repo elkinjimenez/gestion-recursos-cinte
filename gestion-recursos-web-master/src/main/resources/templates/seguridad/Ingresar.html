@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Iniciar sesión - Gestión Recursos</title>
+		<link href="/Estilos/login.css" rel="stylesheet"/>
+		<meta charset="utf-8">
+		<link href="/Estilos/Plantilla/assets/css/style.css" rel="stylesheet" />
+		<link rel="shortcut icon" href="https://tienda.claro.com.co/wcsstore/Claro/images/icon-favicon.ico" mce_href="/wcsstore/Claro/images/icon-favicon.ico">
+	</head>
+	<body>
+		<th:block layout:fragment="scripts">
+			<script type="text/javascript">
+
+				function loginRecuper(form) {
+					switch (form) {
+						case 1:
+							$(" .login").show();
+							$(" .recuperar").hide();
+							break;
+						default:
+							$(" .login").hide();
+							$(" .recuperar").show();
+							break;
+					}
+				}
+			</script>
+		</th:block>
+
+		<header class="navbar pcoded-header navbar-expand-lg navbar-light" th:insert="Header.html"></header>
+
+		<div class="auth-wrapper">
+			<div class="auth-content">
+				<div class="auth-bg">
+					<span class="r"></span>
+					<span class="r s"></span>
+					<span class="r s"></span>
+					<span class="r"></span>
+				</div>
+				<div class="card" id="formContent">
+					<div class="card-body text-center">
+						<div th:insert="MensajesFormulario.html :: mensajes_formulario"> </div>
+
+						<div class="col-md-12 alert alert-danger" th:if="${error != null}"
+							 th:text="${error}">
+						</div>
+
+						<div class="col-md-12 alert alert-info" th:if="${exito != null}"
+							 th:text="${exito}">
+						</div>
+
+						<div>
+
+							<div id="head-form"></div>
+
+							<div class="fadeIn first">
+								<img width="" src="https://www.claro.com.co/portal/co/img/loader-claro.gif" alt="Claro" style="width: 100px;">
+							</div>
+
+							<!-- Login Form -->
+							<form class="mt-5 login" action="/Seguridad/Ingresar" th:object="${modelo}" method="post">
+								<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+
+								<input type="text" id="login" class="form-control input fadeIn first" placeholder="Usuario" required th:field="*{usuario}" maxlength="50" >
+								<input type="password" id="password" class="form-control input fadeIn first" placeholder="Contraseña" required th:field="*{clave}" maxlength="50">
+
+								<div class="mt-4">
+									<input type="submit" class="fadeIn fourth" value="Ingresar">
+									<a onclick="loginRecuper(2)">¿Olvido su contraseña?</a>
+								</div>
+
+							</form>
+
+							<form style="display: none" class="mt-5 recuperar" th:action="@{sendMail}" method="post">
+								<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+
+								<input type="text" class="form-control input fadeIn first" placeholder="Usuario" required name="usuario" maxlength="50" >
+
+								<div class="mt-4">
+									<input type="submit" class="fadeIn fourth" value="Recuperar">
+									<a onclick="loginRecuper(1)">Ingresar</a>
+								</div>
+
+							</form>
+
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<script src="/Estilos/Plantilla/assets/js/vendor-all.min.js"></script>
+	</body>
+</html>

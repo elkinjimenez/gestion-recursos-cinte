@@ -1,0 +1,11 @@
+<!DOCTYPE html>
+<html layout:decorate="~{Layout}">
+<head>
+	<title>Usuario</title>
+</head>
+<body>
+	<div th:fragment="mensajes_formulario">
+		<div th:if="${cl_validation_mensaje}" th:text="${cl_validation_mensaje}" th:class="'alert '+${cl_validacion_mensaje_tipo}"></div>
+	</div>
+</body>
+</html>

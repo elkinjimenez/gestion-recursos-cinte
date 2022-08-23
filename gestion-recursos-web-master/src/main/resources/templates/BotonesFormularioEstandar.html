@@ -1,0 +1,26 @@
+<ul class="nav nav-tabs mb-3" id="crud" th:if="${cl_formulario_dominio != null}" sec:authorize="isAuthenticated()">
+	<li class="nav-item">
+		<a th:attr="class=${cl_formulario_accion == 'Filtro'} ? 'nav-link active' : 'nav-link',href='/'+${cl_formulario_dominio}+'/Filtro'+${cl_formulario_parametros}">
+			<i class="fas fa-filter"></i>
+			Filtrar
+		</a>
+	</li>
+	<li th:if="${cl_formulario_parametros != '?clm=adh'}" class="nav-item">
+		<a th:attr="class=${cl_formulario_accion == 'Crear'} ? 'nav-link active' : 'nav-link',href='/'+${cl_formulario_dominio}+'/Crear'+${cl_formulario_parametros}">
+			<i class="fas fa-plus"></i>
+			Nuevo
+		</a>
+	</li>
+	<li class="nav-item">
+		<a th:attr="class=${cl_formulario_accion == 'Editar'} ? 'nav-link active' : 'nav-link disabled',href='/'+${cl_formulario_dominio}+'/Editar/'+${cl_formulario_ideditar}+${cl_formulario_parametros}">
+			<i class="fas fa-pencil-alt"></i>
+			Editar
+		</a>
+	</li>
+	<li th:if="${cl_formulario_parametros == '?clm=adpr'}" class="nav-item">
+		<a th:attr="class=${cl_formulario_accion == 'Cargar'} ? 'nav-link active' : 'nav-link',href='/'+${cl_formulario_dominio}+'/Cargar'+${cl_formulario_parametros}">
+			<i class="fas fa-file-excel"></i>
+			Carga masiva
+		</a>
+	</li>
+</ul>

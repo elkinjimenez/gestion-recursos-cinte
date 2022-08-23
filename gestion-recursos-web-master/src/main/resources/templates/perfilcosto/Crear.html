@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html layout:decorate="~{Layout}">
+<head>
+    <title>Proyectos</title>
+</head>
+<body>
+<div layout:fragment="content">
+
+    <div th:insert="MensajesFormulario.html :: mensajes_formulario"> </div>
+
+    <form class="validate" action="/Crear" th:attr="action=${cl_formulario_url}" th:object="${modelo}" method="post">
+        <div class="row">
+            <input type="hidden" th:field="*{id}" />
+
+            <div th:if="${perfiles.size() > 0}" class="col-md-3">
+                <div class="form-group">
+                    <label>Perfil</label>
+                    <select class="form-control cl-select-picker" data-live-search="true" th:field="*{perfilId}" required data-rule-min="1" data-msg-min="Debe seleccionar una opción">
+                        <option value="">Seleccione...</option>
+                        <option th:each="p: ${perfiles}" th:text="${p.nombre}" th:value="${p.id}"></option>
+                    </select>
+                </div>
+            </div>
+
+            <div th:if="${perfilTipos.size() > 0}" class="col-md-3">
+                <div class="form-group">
+                    <label>Perfil tipos</label>
+                    <select class="form-control cl-select-picker" data-live-search="true" th:field="*{perfilTipoId}" required data-rule-min="1" data-msg-min="Debe seleccionar una opción">
+                        <option value="">Seleccione...</option>
+                        <option th:each="pt: ${perfilTipos}" th:text="${pt.nombre}" th:value="${pt.id}"></option>
+                    </select>
+                </div>
+            </div>
+
+            <div th:if="${proveedores.size() > 0}" class="col-md-3">
+                <div class="form-group">
+                    <label>Proveedor</label>
+                    <select class="form-control cl-select-picker" data-live-search="true" th:field="*{proveedorId}" required data-rule-min="1" data-msg-min="Debe seleccionar una opción">
+                        <option value="">Seleccione...</option>
+                        <option th:each="pr: ${proveedores}" th:text="${pr.nombre}" th:value="${pr.id}"></option>
+                    </select>
+                </div>
+            </div>
+
+            <div th:if="${nivelPerfiles.size() > 0}" class="col-md-3">
+                <div class="form-group">
+                    <label>Nivel Perfil</label>
+                    <select class="form-control cl-select-picker" data-live-search="true" th:field="*{perfilNivelId}" required data-rule-min="1" data-msg-min="Debe seleccionar una opción">
+                        <option value="">Seleccione...</option>
+                        <option th:each="np: ${nivelPerfiles}" th:text="${np.nombre}" th:value="${np.id}"></option>
+                    </select>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label>Valor</label>
+                    <input type="text" class="form-control" required th:id="valor" th:name="valor" autocomplete="off" th:value="${modelo.valor}" maxlength="20" onkeyup="validarValor();" />
+                    <span id="msgValor" style="color: red; display: none;">Valor debe ser numérico</span>
+                </div>
+            </div>
+            <div class="col-12">
+                <div class="form-group text-center">
+                    <div class="separador-30"></div>
+                    <input type="submit" class="btn btn-info" value="Guardar" id="btnGuardar" />
+                </div>
+            </div>
+        </div>
+    </form>
+    <script type="text/javascript">
+            function validarValor() {
+                var fvalor = document.querySelector("#valor");
+                var btnGuardar = document.querySelector("#btnGuardar");
+                var msgValor = document.querySelector("#msgValor");
+                if(fvalor.value.match("[0-9]{1,20}")) {
+                    try{
+                        btnGuardar.removeAttribute("disabled");
+                        msgValor.style.display = "none";
+                    } catch(error) {
+                    }
+                    return;
+                } else {
+                    btnGuardar.setAttribute("disabled", "true");
+                    msgValor.style.display = "inline";
+                    return;
+                }
+            }
+    </script>
+</div>
+</body>
+</html>

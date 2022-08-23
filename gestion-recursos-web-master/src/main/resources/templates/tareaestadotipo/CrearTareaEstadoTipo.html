@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html layout:decorate="~{Layout}">
+	<head>
+		<title>Tarea estado tipo</title>
+	</head>
+	<body>
+		<div layout:fragment="content">
+		
+			<div th:insert="MensajesFormulario.html :: mensajes_formulario"> </div>
+		
+		    <form class="validate" action="/Usuario" th:attr="action='/TareaEstadoTipo/'+${cl_formaction}" th:object="${modelo}" method="post">
+		    	<div class="row">
+			    	<input type="hidden" th:field="*{id}" />
+			    	<div class="col-md-6">
+			    		<div class="form-group">
+			    			<label>Codigo estado tipo</label>
+			    		<input type="text" class="form-control" required th:field="*{codigotipo}" maxlength="100"/>
+			    		</div>
+			    	</div>
+			    	<div class="col-md-6">
+			    		<div class="form-group">
+			    			<label>Nombre</label>
+			    			<input type="text" class="form-control" required th:field="*{nombre}" maxlength="100"/>
+			    		</div>
+			    	</div>
+				    	<div class="col-md-12">
+				    		<div class="form-group">
+				    			<label>Descripción</label>
+				    			<textarea  class="form-control" required th:field="*{descripcion}" maxlength="100"></textarea>
+				    		</div>
+				    	</div>
+			    	
+			    	<div class="col-12">
+			    		<div class="form-group text-center">
+			    			<div class="separador-30"></div>
+			    			<input type="submit" class="btn btn-info" value="Guardar"/>
+			    		</div>
+			    	</div>
+		    	</div>
+		    </form>
+		</div>
+	</body>
+</html>

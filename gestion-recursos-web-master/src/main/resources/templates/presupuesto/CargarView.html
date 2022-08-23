@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html layout:decorate="~{Layout}">
+<head>
+    <meta charset="UTF-8">
+    <title>Vista cargados</title>
+</head>
+<body>
+    <div layout:fragment="content">
+        <div class="alert alert-success" th:if="${success != null}" th:text="${success}"></div>
+
+        <div class="my-5">
+            <div class="row mx-1">
+                <div class="col-6">
+                    <h4>Resumen:</h4>
+                </div>
+                <div class="col-6">
+                    <a style="float: right;" href="/Presupuesto/Filtro?clm=adpr" type="button" class="btn btn-primary">Volver</a>
+                </div>
+            </div>
+
+            <label>Actualizados:</label>
+            <div th:if="${actualizados.size() == 0}">
+                <div class="alert alert-info">
+                    Sin actualizaciones realizadas!!!
+                </div>
+            </div>
+            <div>
+                <table th:if="${actualizados.size() > 0}" class="table table-bordered">
+                    <thead>
+                    <tr>
+                        <th>Gerente</th>
+                        <th>AGRCAPEX</th>
+                        <th>ID Proyecto</th>
+                        <th>Nombre AMX</th>
+                        <th>Nombre Local</th>
+                        <th>Elemento PEP</th>
+                        <th>Tipo Proyecto</th>
+                        <!--                    <th>Presupuesto USD</th>-->
+                        <!--                    <th>Presupuesto COP</th>-->
+                        <th>Saldo USD</th>
+                        <th>Saldo COP</th>
+                        <th>Observación</th>
+                    </tr>
+                    </thead>
+                    <tbody th:each="ac : ${actualizados}" th:remove="tag">
+                    <tr>
+                        <td th:text="${ac.nombreGerente}"></td>
+                        <td th:text="${ac.agrcapex}"></td>
+                        <td th:text="${ac.idProyecto}"></td>
+                        <td th:text="${ac.nombreAMX}">No fue detectado</td>
+                        <td th:text="${ac.nombreLocal}">No fue detectado</td>
+                        <td th:text="${ac.elementoPEP}">No fue detectado</td>
+                        <td th:text="${ac.tipoProyecto}">No fue detectado</td>
+                        <!--                    <td th:text="${ac.presupuestoUSD}"></td>-->
+                        <!--                    <td th:text="${ac.presupuestoCOP}"></td>-->
+                        <td th:text="${#numbers.formatDecimal(ac.usd, 0, 'POINT', 2, 'COMMA')}"></td>
+                        <td th:text="${#numbers.formatDecimal(ac.cop, 0, 'POINT', 2, 'COMMA')}"></td>
+                        <td th:text="${ac.observacion}"></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+
+
+            <!--label>Errores:</label>
+            <div th:if="${errores.size() == 0}">
+                <div class="alert alert-info">
+                    Sin errores detectados!!!
+                </div>
+            </div>
+            <table th:if="${errores.size() > 0}" class="table table-bordered my-5">
+                <thead>
+                <tr>
+                    <th scope="col">ID Proyecto</th>
+                    <th scope="col">Gerente</th>
+                    <th scope="col">Elemento PEP</th>
+                    <th scope="col">Nombre Proyecto</th>
+                    <th scope="col">Presupuesto</th>
+                    <th scope="col">Observación</th>
+                </tr>
+                </thead>
+                <tbody th:each="e : ${errores}" th:remove="tag">
+                <tr>
+                    <td th:text="${e.idProyecto}"></td>
+                    <td th:text="${e.nombreGerente}">No fue detectado</td>
+                    <td th:text="${e.elementoPEP}">No fue detectado</td>
+                    <td th:text="${e.nombreProyecto}">No fue detectado</td>
+                    <td th:text="${e.montoPresupuesto}">No fue detectado</td>
+                    <td class="text-danger" th:text="${e.observacion}"></td>
+                </tr>
+                </tbody>
+            </table-->
+        </div>
+
+    </div>
+
+</body>
+</html>

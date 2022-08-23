@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html layout:decorate="~{Layout}">
+<head>
+<title>Tareas</title>
+</head>
+<body>
+	<th:block layout:fragment="estilos">
+		<link href="/Estilos/tarea.css" rel="stylesheet"></script>
+	</th:block>
+	<th:block layout:fragment="scripts">
+		<script type="text/javascript" src="/Scripts/tarea.js"></script>
+	</th:block>
+	
+	<div layout:fragment="content" class="cl-seccion-tarea">		
+		<div class="row">
+			<div th:insert="MensajesFormulario.html :: mensajes_formulario">
+			</div>
+			
+			<div class="col-12">
+				<div class="border">
+					<div class="col-12">
+						<strong>Filtros</strong>
+					</div>
+					<div class="col-md-6">
+			    		<div class="form-group">
+			    			<select class="form-control cl-select-picker ddl-tarea-proyecto" data-live-search="true" required data-rule-min="1" data-msg-min="Debe seleccionar una opción">
+			    				<option value="0">Seleccione un proyecto...</option>
+			    				<option th:each="item : ${proyectos}" th:value="${item.id}" th:text="${item.nombre}"></option>
+			   				</select>
+			    		</div>
+			    	</div>
+				</div>
+			</div>
+			
+	    	<div class="col-md-6">
+	    		<div class="form-group">
+	    			<button type="button" class="btn btn-secondary btn-tarea-agregar" disabled>
+	    				<i class="fas fa-plus"></i>
+	    				Nueva tarea
+	    			</button>
+	    		</div>
+	    	</div>
+	    </div>
+	    <div class="separador-10"></div>
+	    <div class="row cl-contenedor-tareas">
+	    	
+    	</div>
+    	
+    	<div class="modal fade" id="cl-tarea-modal" tabindex="-1" role="dialog" aria-labelledby="cl-tarea-modal-label" aria-hidden="true">
+			<div class="modal-dialog modal-lg" role="document">
+				<div class="modal-content">
+					<div class="modal-body p-0 pnl-nueva-tarea">
+						<div th:insert="tarea/_Tarea.html :: tarea_plantilla">
+	    				</div>
+					</div>
+					<div class="modal-footer p-1 border-top-0">
+						<button type="button" class="btn btn-warning" data-dismiss="modal">
+							<i class="far fa-trash-alt"></i>
+							Cancelar
+						</button>
+						<button type="submit" form="cl-form-tarea" class="btn btn-success">
+							<i class="far fa-save"></i>
+							Guardar
+						</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+</html>

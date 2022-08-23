@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+</head>
+<body>
+<!-- [ Header ] start -->
+		<div class="m-header">
+			<a class="mobile-menu" id="mobile-collapse1" href="javascript:"><span></span></a>
+			<a href="index.html" class="b-brand">
+				<div class="">
+					<img width="" src="https://www.claro.com.co/portal/co/img/loader-claro.gif" alt="Claro" style="width: 30px;">
+				</div>
+				<span class="b-title">Gestión Recursos</span>
+			</a>
+		</div>
+		<div class="collapse navbar-collapse">
+			<ul class="navbar-nav mr-auto">
+				<li><a href="javascript:" class="full-screen" onclick="javascript:toggleFullScreen()"><i class="feather icon-maximize"></i></a></li>
+			</ul>
+			<ul class="navbar-nav ml-auto">
+				<li class="nav-item dropdown" sec:authorize="!isAuthenticated()">
+					<a class="nav-link" href="/Estimaciones/Crear" title="Ingrese aqui para crear estimaciones">
+						Estimaciones
+					</a>
+				</li>
+				<li class="nav-item dropdown" sec:authorize="!isAuthenticated()">
+					<a class="nav-link" href="/Hallazgo/Filtro" title="Ingrese aqui para crear hallazgos">
+						Hallazgos
+					</a>
+				</li>
+				<li class="nav-item dropdown" sec:authorize="!isAuthenticated()">
+					<a class="nav-link" href="/Seguridad/Ingresar">
+						<strong>Iniciar sesión</strong>
+					</a>
+				</li>
+				<li class="nav-item dropdown" sec:authorize="isAuthenticated()">
+					<div class="dropdown drp-user">
+						<a href="javascript:" class="dropdown-toggle" data-toggle="dropdown">
+							<i class="fas fa-user-circle"></i>
+							<span sec:authentication="name"></span>
+						</a>
+						<div class="dropdown-menu dropdown-menu-right profile-notification">
+							<div class="pro-head">
+								<img src="https://media.istockphoto.com/vectors/man-icon-profile-member-user-perconal-symbol-vector-on-white-isolated-vector-id1093830022?b=1&k=6&m=1093830022&s=170667a&w=0&h=75XzTAm0D-QNN8EH6Ph1VFSEzXzLJwv83Ux5YHGIE2U=" class="img-radius" alt="User-Profile-Image">
+								<span sec:authentication="name"></span>
+								<a href="javascript:;" onclick="document.getElementById('cerrarSesion').submit();" class="dud-logout" title="Cerrar Sesión">
+									<i class="feather icon-log-out"></i>
+								</a>
+							</div>
+							<ul class="pro-body">
+								<li><a href="javascript:" class="dropdown-item"><i class="feather icon-user"></i> Perfil</a></li>
+								<li><a href="/ajustes" class="dropdown-item"><i class="feather icon-settings"></i> Ajustes</a></li>
+								<li>
+									<a href="javascript:;" onclick="document.getElementById('cerrarSesion').submit();" class="dropdown-item"><i class="feather icon-lock"></i> Cerrar sesión</a>
+									<form class="dropdown-item p-0" id="cerrarSesion" action="/Seguridad/CerrarSesion" method="post">
+									</form>
+								</li>
+							</ul>
+						</div>
+					</div>
+				</li>
+			</ul>
+		</div>
+	<!-- [ Header ] end -->
+
+	<!--
+	<nav class="navbar navbar-expand-lg navbar-light bg-info p-1 fixed-top">
+		<div class="container-fluid">
+			<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+				<span class="navbar-toggler-icon"></span>
+			</button>
+	
+			<div class="collapse navbar-collapse justify-content-end" id="navbarSupportedContent">
+				<ul class="navbar-nav ml-auto">
+				</ul>
+			</div>
+		</div>
+	</nav>-->
+</body>
+</html>

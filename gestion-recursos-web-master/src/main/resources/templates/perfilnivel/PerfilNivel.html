@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html layout:decorate="~{Layout}">
+	<head>
+		<title>Nivel perfil</title>
+	</head>
+	<body>
+		<div layout:fragment="content">
+		
+			<div th:insert="MensajesFormulario.html :: mensajes_formulario"> </div>
+		
+		    <form class="validate" action="/Usuario" th:attr="action=${cl_formulario_url}" th:object="${modelo}" method="post">
+		    	<div class="row">
+			    	<input type="hidden" th:field="*{id}" />
+			    	
+			    	<div class="col-md-3">
+				    	<div class="form-group">
+				    		<label>Nombre</label>
+				    		<input class="form-control" required type="text" th:field="*{nombre}" maxlength="200"/>
+				    	</div>
+			    	</div>
+			    	<div class="col-md-3">
+				    	<div class="form-group">
+				    		<label>Jerarquía</label>
+				    		<input class="form-control" required type="number" th:field="*{jerarquia}" maxlength="10"/>
+				    	</div>
+			    	</div>
+			    	<div class="col-12">
+			    		<div class="form-group text-center">
+			    			<div class="separador-30"></div>
+			    			<input type="submit" class="btn btn-info" value="Guardar"/>
+			    		</div>
+			    	</div>
+		    	</div>
+		    </form>
+		</div>
+	</body>
+</html>

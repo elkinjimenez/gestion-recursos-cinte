@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html layout:decorate="~{Layout}"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+>
+<head>
+    <meta charset="UTF-8">
+    <title>Gerente</title>
+</head>
+<body>
+<th:block layout:fragment="scripts">
+    <script type="text/javascript" src="/Complementos/DataTables/datatables.min.js" rel="stylesheet"></script>
+    <script type="text/javascript" src="/Scripts/cl-tablas.js"></script>
+    <script>
+        var url = window.location.pathname;
+        var idPadre = url.substring(url.lastIndexOf('/') + 1);
+        $("#crud a")[1].href = "/Estructuraorganizacional/Crear/1/0";
+    </script>
+</th:block>
+
+
+<div layout:fragment="content">
+    <form method="post" action="/Estructuraorganizacional/"
+          th:attr="action=${modelo.id != null ? '': '/Estructuraorganizacional/Crear'}" th:object="${modelo}">
+        <div class="container">
+            <div class="row" th:if="${datos_cargados}">
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label>Empleados</label>
+
+                        <select class="form-control cl-select-picker" data-live-search="true" th:field="*{codEmpleado}"
+                                required>
+                            <option value="">Seleccione...</option>
+                            <option th:each="empleado : ${empleados}"
+                                    th:selected="${empleado.codempleado == modelo.codEmpleado }"
+                                    th:value="${empleado.codempleado}"
+                                    th:text="${empleado.nombre}">
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label>Estructura Organizacional</label>
+                        <input class="form-control" th:field="*{nombreGerencia}" required/>
+                    </div>
+                    <div>
+                        <input type="hidden" th:field="*{codEmpleado}"/>
+                        <input type="hidden" th:field="*{id}"/>
+                        <input type="hidden" th:field="*{codTipoEstructura}"/>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group" th:if="*{jefeActual.id != null}">
+
+                        <label th:if="*{codTipoEstructura == 2}">Gerencia Asignada</label>
+                        <label th:if="*{codTipoEstructura == 3}">Coordinacion Asignada</label>
+
+                        <select class="form-control cl-select-picker" required data-live-search="true"
+                                th:field="*{codPadre}">
+                            <option value="">Seleccione...</option>
+                            <option th:each="jefe : *{listajefes} "
+                                    th:value="${jefe.id}"
+                                    th:selected="${jefe.id == modelo.jefeActual.id}"
+                                    th:text="${jefe.nombre}">
+                                <!--                                    th:text="${jefe.nombre1} + ' ' + ${jefe.nombre2} + ' ' + ${jefe.apellido1} + ' ' + ${jefe.apellido2}">-->
+                            </option>
+                        </select>
+                    </div>
+                </div>
+                <input type="hidden" th:field="*{codPadre}"/>
+                <div class="col-12">
+                    <div class="form-group text-center">
+                        <div class="separador-30"></div>
+                        <input type="submit" class="btn btn-info" value="Guardar asignación"/>
+                    </div>
+                </div>
+            </div>
+            <div class="row" th:if="${!datos_cargados}">
+                <span><h3>No se cargaron los combos  del formulario </h3></span>
+            </div>
+        </div>
+    </form>
+</div>
+</body>
+</html>

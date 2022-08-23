@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html layout:decorate="~{Layout}">
+	<head>
+		<title>Hallazgo</title>
+	</head>
+	<body>
+		<th:block layout:fragment="scripts">
+			<script type="text/javascript">
+				/*<![CDATA[*/			
+					var hallazgoGuardado = /*[[${hallazgoGuardado}]]*/ null;
+					var hallazgoNoGuardado = /*[[${hallazgoNoGuardado}]]*/ false;
+
+					console.info("hallazgoGuardado", hallazgoGuardado);
+					console.info("hallazgoNoGuardado", hallazgoNoGuardado);
+			
+					if(hallazgoGuardado) {
+						alert("Se registrado el  hallazgo con éxito, su número de ticket es: " + hallazgoGuardado);
+						history.back();
+					} else if (hallazgoNoGuardado) {
+						alert("No se ha logrado registrar el hallazgo, por favor contacte al administrador del sistema");
+					}
+			
+				/*]]>*/
+
+			</script>
+		</th:block>
+		<div layout:fragment="content">
+		
+			<div th:insert="MensajesFormulario.html :: mensajes_formulario"> </div>
+			<div th:if="${error != null}" class="alert alert-danger">
+				<div th:text="${error}"></div>
+			</div>
+
+			<form th:action="@{/Hallazgo/Filtro}">
+				<div class="col-12">
+					<div class="form-group text-center">
+						<input style="float:right;" type="submit" class="btn btn-success" value="Volver"/>
+						<div class="separador-30"></div>
+						<div class="separador-30"></div>
+						<div class="separador-30"></div>
+					</div>
+				</div>
+			</form>
+
+		    <form th:if="${compromisoFabrica != null}" class="validate" action="/Usuario" th:attr="action=${cl_formulario_url}" th:object="${hallazgo}" method="post">
+		    	<div class="row">
+			    	<input type="hidden" th:field="*{id}" />
+			    	<input type="hidden" th:field="*{idCompromiso}" />
+                    <div class="col-md-12">
+                        <div class="form-group" >
+                        	<label for="cedula">Entregable:</label>
+                            <input class="form-control" type="text" th:value="${compromisoFabrica.codProyecto} + ' - ' + ${compromisoFabrica.descripcion}" readonly><br>
+                        </div>
+                    </div>
+                        <div class="col-md-4">
+	                        <div class="form-group">
+	                            <label for="cedula">Cédula:</label>
+	                            <input class="form-control" type="text" th:field="*{cedula}" id="cedula" name="cedula" required><br>
+	                        </div>
+	                    </div>
+                        <div class="col-md-4">
+	                        <div class="form-group">
+	                            <label for="nombre">Nombres:</label>
+	                            <input class="form-control" type="text" th:field="*{nombre}" id="nombre" name="nombre" required><br>
+	                        </div>
+	                    </div>
+                        <div class="col-md-4">
+	                        <div class="form-group">
+	                            <label for="celular">Celular:</label>
+	                            <input class="form-control" type="text" th:field="*{celular}" id="celular" name="celular" required><br>
+	                        </div>
+	                    </div>
+                        <div class="col-md-4">
+	                        <div class="form-group">
+	                            <label for="gerencia">Gerencia:</label>
+	                            <input class="form-control" type="text" th:field="*{gerencia}" id="gerencia" name="gerencia" required><br>
+	                        </div>
+	                    </div>
+                        <div class="col-md-4">
+	                        <div class="form-group">
+	                            <label for="correo">Correo:</label>
+	                            <input class="form-control" type="text" th:field="*{correo}" id="correo" name="correo" required><br>
+	                        </div>
+	                    </div>
+
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label>Tipo Hallazgo</label>
+                            <select class="form-control cl-select-picker" data-live-search="true" required th:field="*{tipo}"  data-msg-min="Debe seleccionar una opción">
+                                <option value="0">Seleccione...</option>
+                                <option th:each="item : ${hallazgoTipos}" th:value="${item.valor}" th:text="${item.nombre}"></option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label>Criticidad</label>
+                            <select class="form-control cl-select-picker" data-live-search="true" required th:field="*{criticidad}" data-msg-min="Debe seleccionar una opción">
+                                <option value="0">Seleccione...</option>
+                                <option th:each="item : ${hallazgoCriticidades}" th:value="${item.valor}" th:text="${item.nombre}"></option>
+                            </select>
+                        </div>
+                    </div>
+			    	<div class="col-md-4">
+			    		<div class="form-group">
+			    			<label>Fecha Hallazgo</label> <br/>
+							<span th:text="${#dates.format(hallazgo.fechaHallazgo, 'dd/MM/yyyy')}"></span>
+
+			    			 <!-- <input type="text" class="form-control cl-datetime-picker" th:id="fechaHallazgoLocal" th:name="fechaHallazgoLocal" autocomplete="off" th:value="${hallazgo.fechaHallazgo}?${#dates.format(hallazgo.fechaHallazgo, 'dd/MM/yyyy HH:mm')}:''" maxlength="20"/>-->
+			    		</div>
+			    	</div>
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label>Detalle</label>
+                            <textarea class="form-control" th:field="*{detalle}" required maxlength="1000" cols="30" rows="3"></textarea>
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label>Evidencia</label>
+                            <input class="form-control" type="text" th:field="*{evidencia}" maxlength="4000"/>
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <div class="form-group text-center">
+                            <div class="separador-30"></div>
+                            <input type="submit" class="btn btn-info" value="Guardar"/>
+                        </div>
+                    </div>
+		    	</div>
+		    </form>
+		</div>
+	</body>
+</html>

@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en" layout:decorate="~{Layout}">
+<head>
+    <meta charset="UTF-8">
+    <title>Ajustes</title>
+</head>
+<body>
+    <th:block layout:fragment="estilos">
+        <link href="/Estilos/validarPassword.css" rel="stylesheet"/>
+    </th:block>
+    <th:block layout:fragment="scripts">
+        <script type="text/javascript" src="/Scripts/validarPassword.js"></script>
+        <script id="rendered-js">
+            $(document).ready(function ($) {
+                $('#myPassword').strength({
+                    strengthClass: 'form-control strength',
+                    strengthMeterClass: 'strength_meter',
+                    strengthButtonClass: 'button_strength',
+                    strengthButtonText: 'Mostrar Password',
+                    strengthButtonTextToggle: 'Ocultar Password'
+                });
+            });
+        </script>
+    </th:block>
+
+    <div layout:fragment="content">
+
+        <div class="card">
+            <div class="bg-danger text-center">
+                <h1 class="text-white">Cambio de Contraseña</h1>
+            </div>
+        </div>
+
+        <div th:insert="MensajesFormulario.html :: mensajes_formulario"> </div>
+        <div th:if="${error != null}" class="alert alert-danger">
+            <div th:text="${error}"></div>
+        </div>
+        <form id="myform" method="post" action="/cambioClave">
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    <label>Usuario</label>
+                    <span class="form-control" sec:authentication="name"></span>
+                </div>
+                <div class="form-group col-md-6">
+                    <label>Nueva Contraseña</label>
+                    <input type="password" id="myPassword" class="form-control" name="clave" placeholder="Password" minlength="5" required>
+                </div>
+            </div>
+            <div class="col-md-12 text-center">
+                <button type="submit" class="btn btn-primary">Guardar</button>
+            </div>
+        </form>
+
+    </div>
+</body>
+</html>

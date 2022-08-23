@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html layout:decorate="~{Layout}">
+<head>
+    <title>Hallazgo</title>
+</head>
+<body>
+<th:block layout:fragment="scripts">
+    <script type="text/javascript">
+        /*<![CDATA[*/
+        var respuestaGuardada = /*[[${respuestaGuardada}]]*/ null;
+        var respuestaNoGuardada = /*[[${respuestaNoGuardada}]]*/ false;
+
+        console.info("respuestaGuardada", respuestaGuardada);
+        console.info("respuestaNoGuardada", respuestaNoGuardada);
+
+        if (hallazgoGuardado) {
+            alert("Se registrado la respuesta con éxito, su número de ticket es: " + respuestaGuardada);
+            history.back();
+        } else if (hallazgoNoGuardado) {
+            alert("No se ha logrado registrar la respuesta, por favor contacte al administrador del sistema");
+        }
+
+        /*]]>*/
+    </script>
+</th:block>
+<div layout:fragment="content">
+
+    <div th:insert="MensajesFormulario.html :: mensajes_formulario"></div>
+    <div th:if="${error != null}" class="alert alert-danger">
+        <div th:text="${error}"></div>
+    </div>
+    <form th:action="@{/}">
+        <h1 align="center">Respuesta Hallazgo</h1>
+        <div class="separador-30"></div>
+        <div class="separador-30"></div>
+    </form>
+    <form th:if="${hallazgoReportado != null}" class="validate" action="/Usuario" th:attr="action=${cl_formulario_url}"
+          th:object="${hallazgo}" method="post">
+        <div class="row" th:if="${datos_cargados}" >
+            <input type="hidden" th:field="*{id}"/>
+            <input type="hidden" th:field="*{idCompromiso}"/>
+            <div class="col-md-12">
+                <div class="form-group">
+                    <label>Hallazgo:</label>
+                    <input class="form-control" type="text"
+                           th:value="${hallazgoReportado.proyecto} + ' - ' + ${hallazgoReportado.lineaProducto} + ' - ' + ${hallazgoReportado.idCambio} + ' - ' + ${hallazgoReportado.tipo} + ' - ' + ${hallazgoReportado.detalle} + ' - ' + ${hallazgoReportado.criticidad} + ' - ' + 'Reporta: ' + ${hallazgoReportado.nombreReporta}"
+                           readonly><br>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label>&nbsp;</label>
+                    <div class="separador-10"></div>
+                    <input id="esHallazgo" type="checkbox" th:field="*{esHallazgo}">&nbsp;
+                    <label for="esHallazgo">Es Hallazgo?:</label>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label>Problema Identificado:</label>
+                    <select class="form-control cl-select-picker" data-live-search="true" required
+                            th:field="*{problemaIdentificado}" data-msg-min="Debe seleccionar una opción">
+                        <option value="0">Seleccione...</option>
+                        <option th:each="item : ${problemaIdentificado}" th:value="${item.valor}"
+                                th:text="${item.nombre}"></option>
+                    </select>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label>Solución Entregada:</label>
+                    <select class="form-control cl-select-picker" data-live-search="true" required
+                            th:field="*{solucionEntregada}" data-msg-min="Debe seleccionar una opción">
+                        <option value="0">Seleccione...</option>
+                        <option th:each="item : ${solucionEntregada}" th:value="${item.valor}"
+                                th:text="${item.nombre}"></option>
+                    </select>
+                </div>
+            </div>
+            <div class="col-md-12">
+                <div class="form-group">
+                    <label>Detalle</label>
+                    <textarea class="form-control" th:field="*{detalleRespuesta}" required maxlength="1000" cols="30"
+                              rows="3"></textarea>
+                </div>
+            </div>
+            <div class="col-md-12">
+                <div class="form-group">
+                    <label>Evidencia</label>
+                    <input class="form-control" type="text" th:field="*{evidenciaRespuesta}" maxlength="4000"/>
+                </div>
+            </div>
+            <div class="col-12">
+                <div class="form-group text-center">
+                    <div class="separador-30"></div>
+                    <input type="submit" class="btn btn-info" value="Guardar"/>
+                </div>
+            </div>
+        </div>
+        <div class="row" th:if="${!datos_cargados}">
+            <div class="col-md-12">
+                <span><h3>No se cargaron los combos  del formulario </h3></span>
+            </div>
+        </div>
+    </form>
+</div>
+</body>
+</html>
