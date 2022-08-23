@@ -295,14 +295,14 @@
                         <div class="form-group">
                             <label>Puntos mes</label>
                             <input type="number" required class="form-control" th:name="puntoMes" id="puntoMes"
-                                th:value="${costoEmpleado.puntosMes}" disabled  />
+                                th:value="${costoEmpleado.puntosMes}" onkeydown="if(event.keyCode==9){return true} else{return false}" />
                         </div>
                     </div>
                     <div class="col-md-3 costoEmpleado">
                         <div class="form-group">
                             <label>Factor punto</label>
                             <input type="number" required class="form-control" th:name="factorPunto" id="factorPunto"
-                                th:value="${costoEmpleado.factorPunto}" max="20000" disabled  />
+                                th:value="${costoEmpleado.factorPunto}" max="20000" onkeydown="if(event.keyCode==9){return true} else{return false}" />
                         </div>
                     </div>
                     <div class="col-md-3 costoEmpleado">
