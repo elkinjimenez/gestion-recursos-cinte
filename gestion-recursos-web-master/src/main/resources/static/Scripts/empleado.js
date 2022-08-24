@@ -276,15 +276,27 @@ function cargarConstante() {
     });
 }
 
+//Agregar validacion de campos para digitar enteros
+$("#formEmpleado").validate({
+    rules: {
+        costoPunto: {
+            digits: true
+        },
+        costoMes: {
+            digits: true
+        },
+    }
+});
+
 function calulatePointMonthPointFactor() {
     var boxPointCost = $("#costoPunto").val();
     var boxMonthCost = $("#costoMes").val();
-    console.log('costoPunto' + boxPointCost);
-    console.log('costoMes' + boxMonthCost);
     if (boxPointCost > 0 && boxMonthCost > 0) {
         var pointMont = ((Math.round(boxMonthCost / boxPointCost) / 10) * 10).toFixed(1);
+        var pointFactor = Math.round((pointMont / constantValue) * 100000000000000) / 100000000000000;
+        var hasDecimalPosition = pointFactor.toString().indexOf(',') > 0 ? pointFactor.toString().indexOf(',') : pointFactor.toString().indexOf('.');
         $("#puntoMes").val(pointMont);
-        $("#factorPunto").val(Math.round((pointMont / constantValue) * 10000) / 10000);
+        hasDecimalPosition > 0 ? $("#factorPunto").val(pointFactor.toString().substring(0, hasDecimalPosition + 8)) : $("#factorPunto").val(pointFactor);
     }
 }
 
