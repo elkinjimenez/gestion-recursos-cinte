@@ -7,6 +7,15 @@ var codProyecto = 0;
 var costo = 0;
 var totalCosto = 0;
 var href;
+const diasSemana = ['lunes', 'martes', 'miercoles', 'jueves', 'viernes', 'sabado', 'domingo',];
+let holidays = [
+    { fecha: "2022-08-31 00:00:00" },
+    { fecha: "2022-09-05 00:00:00" },
+    { fecha: "2022-09-14 00:00:00" },
+    { fecha: "2022-09-15 00:00:00" },
+    { fecha: "2022-09-16 00:00:00" },
+    { fecha: "2022-09-19 00:00:00" },
+];
 $("#Agregar").hide();
 inicio();
 proyecto();
@@ -68,23 +77,30 @@ function agregarContenido() {
 }
 /*  funcion para colocar en la estimacion el consecutivo de la fecha de inicio y fin de cada uno de los items de la estimacion */
 function colocarConsecutivoFechasInicioyFin() {
-    let diaactual = new Date();
-    diaactual = dayjs(diaactual);
-    let diaposterior;
+    let iterationDay = dayjs(new Date());
     Array.prototype.forEach.call(document.getElementsByName('fechaInicio'), function (item, clave) {
-        if (clave == 0) {
-            item.value = diaactual.format('YYYY-MM-DD')
-            diaposterior = diaactual.add(1, 'day');
-            document.getElementsByName('fechaFin')[clave].value = diaposterior.format('YYYY-MM-DD')
-            diaactual = diaposterior
-        } else {
-            diaactual = diaactual.add(1, 'day')
-            diaposterior = diaactual.add(1, 'day')
-            item.value = diaactual.format('YYYY-MM-DD')
-            document.getElementsByName('fechaFin')[clave].value = diaposterior.format('YYYY-MM-DD')
-            diaactual = diaposterior;
-        }
+        iterationDay = validateWeekend(iterationDay);
+        item.value = (iterationDay).format('YYYY-MM-DD');
+        iterationDay = iterationDay.add(1, 'day');
+        iterationDay = validateWeekend(iterationDay);
+        document.getElementsByName('fechaFin')[clave].value = (iterationDay).format('YYYY-MM-DD');
+        iterationDay = iterationDay.add(1, 'day');
     });
+}
+
+/**
+ * It takes a date, checks if it's a weekend, if it is, it adds one day to the date and checks again,
+ * until it's not a weekend anymore
+ * @param date - moment object
+ * @returns A moment object.
+ */
+function validateWeekend(date) {
+    let weekday = diasSemana[new Date(date.format('YYYY-MM-DD')).getDay()];
+    while (weekday.includes('sab') || weekday.includes('dom') || (holidays.filter(x => x.fecha.includes(date.format('YYYY-MM-DD'))).length > 0)) {
+        date = date.add(1, 'day');
+        weekday = diasSemana[new Date(date.format('YYYY-MM-DD')).getDay()];
+    }
+    return date;
 }
 
 function pintarTabla(cantidadFor, entregable) {
