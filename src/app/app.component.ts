@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
+import { WordService } from './services/word/word.service';
 
 @Component({
   selector: 'app-root',
@@ -9,5 +10,25 @@ import { RouterOutlet } from '@angular/router';
   styleUrl: './app.component.css'
 })
 export class AppComponent {
-  title = 'guess-the-word';
+
+  orderedWord: string[] = [];
+
+  desorderedWord: string[] = [];
+
+  constructor(
+    private wordService: WordService,
+  ) { }
+
+  ngOnInit() {
+    this.wordService.getWord().subscribe((data) => {
+      if (data) {
+        this.orderedWord = data[0].split('');
+        this.desorderedWord = [...this.orderedWord];
+        this.desorderedWord.sort(() => Math.random() - 0.5);
+      }
+    }, error => {
+      alert('Error al consumir el servicio de consulta de palabras: ' + error);
+    });
+  }
+
 }
