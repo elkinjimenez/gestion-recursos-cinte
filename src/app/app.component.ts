@@ -2,6 +2,8 @@ import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { WordService } from './services/word/word.service';
 
+declare var $: any;
+
 @Component({
   selector: 'app-root',
   standalone: true,
@@ -11,20 +13,6 @@ import { WordService } from './services/word/word.service';
 })
 export class AppComponent {
 
-  wordListing = [
-    'gatos',
-    'perros',
-    'ladrillo',
-    'iglesia',
-    'colorido',
-    'árboles',
-    'lapicero',
-    'reloj',
-    'ciudades',
-    'general',
-    'clausura'
-  ]
-
   isDisabled: boolean[] = [];
 
   orderedWord: string[] = [];
@@ -32,6 +20,8 @@ export class AppComponent {
   desorderedWord: string[] = [];
 
   validateWord: string[] = [];
+
+  modal = {} as Modal;
 
   constructor(
     private wordService: WordService,
@@ -48,14 +38,13 @@ export class AppComponent {
   public randomWord() {
     this.isDisabled = [];
     this.validateWord = [];
-    this.wordListing = this.wordListing.sort(() => Math.random() - 0.5);
-    this.orderedWord = this.wordListing[0].split('');
-    this.wordListing.shift();
+    this.wordService.wordListing = this.wordService.wordListing.sort(() => Math.random() - 0.5);
+    this.orderedWord = this.wordService.wordListing[0].split('');
+    this.wordService.wordListing.shift();
     this.desorderedWord = [...this.orderedWord];
     this.desorderedWord.sort(() => Math.random() - 0.5);
-    if (this.wordListing.length < 5)
+    if (this.wordService.wordListing.length < 10)
       this.getWordsApi();
-
   }
 
   private getWordsApi() {
@@ -63,7 +52,7 @@ export class AppComponent {
       if (data && data.length > 0) {
         data.forEach(word => {
           if (/^[^\s.!#]{4,8}$/.test(word)) {
-            this.wordListing.push(word);
+            this.wordService.wordListing.push(word);
           }
         })
       }
@@ -75,6 +64,47 @@ export class AppComponent {
   public addLetter(letter: string, index: number) {
     this.validateWord.push(letter);
     this.isDisabled[index] = true;
+    this.validateGame();
+  }
+
+  public clean() {
+    this.isDisabled = [];
+    this.validateWord = [];
+  }
+
+  validateGame() {
+    if (this.validateWord.length == this.orderedWord.length) {
+      if (this.validateWord.toString() == this.orderedWord.toString()) {
+        this.showModalResponse(
+          this.wordService.listTitleVictory[Math.floor(Math.random() * this.wordService.listTitleVictory.length)],
+          `${this.wordService.listMsgVictory[Math.floor(Math.random() * this.wordService.listMsgVictory.length)]} Sigue así...`,
+          'SUCCESS');
+        setTimeout(() => {
+          this.randomWord();
+        }, 1000);
+      } else {
+        this.showModalResponse(
+          this.wordService.listTitleLose[Math.floor(Math.random() * this.wordService.listTitleLose.length)],
+          `${this.wordService.listMsgLose[Math.floor(Math.random() * this.wordService.listMsgVictory.length)]} Intenta de nuevo...`,
+          'DANGER');
+        setTimeout(() => {
+          this.clean();
+        }, 1000);
+      }
+    }
+  }
+
+  showModalResponse(title: string, msg: string, type: TYPE_MODAL) {
+    this.modal = { msg, title, type }
+    $('#modalResponse').modal('show');
   }
 
 }
+
+interface Modal {
+  title: string;
+  msg: string;
+  type: TYPE_MODAL;
+}
+
+type TYPE_MODAL = 'SUCCESS' | 'DANGER';

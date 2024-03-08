@@ -12,3 +12,27 @@
   background-color: #030616;
   border-radius: 15px;
 }
+
+.modal-content {
+  background-color: #121733;
+  color: white;
+}
+
+.modal-SUCCESS {
+  color: #01a601;
+  font-weight: bold;
+}
+
+.modal-DANGER {
+  color: red;
+}
+
+.btn-close {
+  background-color: white;
+  border-radius: 50%;
+  padding: 10px;
+}
+
+.emoji-response {
+  font-size: 60px;
+}

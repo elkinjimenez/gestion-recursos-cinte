@@ -5,8 +5,8 @@
         @if (orderedWord.length > 0) {
         <h5 class="text-white">Adivina la palabra</h5>
         <div class="text-secondary pt-2">
-          Seleccione las letras en el orden <br>
-          que usted considere para armar la palabra
+          Selecciona las letras en el orden <br>
+          que consideres para armar la palabra
         </div>
         <div class="box-letters my-4 pb-2">
           @for (item of orderedWord; track $index) { @if(validateWord[$index]){
@@ -26,7 +26,7 @@
       <div class="card-footer">
         <div class="mb-4">
           <button class="btn btn-primary mx-3 px-4" (click)="randomWord()">Saltar</button>
-          <button class="btn btn-primary mx-3 px-4">Limpiar</button>
+          <button class="btn btn-primary mx-3 px-4" (click)="clean()">Limpiar</button>
         </div>
         <div class="d-flex justify-content-between">
           <div>
@@ -36,6 +36,32 @@
             <small class="text-secondary">Mistakes:</small>
           </div>
         </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="modalResponse" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-body">
+        @if (modal.msg) {
+        <div class="d-flex justify-content-end">
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="m-5 mt-1">
+          <div class="emoji-response">
+            @if (modal.type == 'SUCCESS') {
+            <span class="">🎉</span>
+            }@else if (modal.type == 'DANGER') {
+            <span class="emoji-response">😓</span>
+            }
+          </div>
+          <h1 class="modal-{{modal.type}}">{{modal.title}}</h1>
+          <h5>{{modal.msg}}</h5>
+        </div>
+
+        }
       </div>
     </div>
   </div>
