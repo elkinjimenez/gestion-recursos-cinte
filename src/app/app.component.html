@@ -1,32 +1,41 @@
 <div class="d-flex justify-content-center align-items-center vh-100 bg-primary-purple">
   <div class="text-center">
-    <div class="card bg-dark text-white">
+    <div class="card big-card p-4">
       <div class="card-body">
         @if (orderedWord.length > 0) {
-        <h5>Adivina la palabra</h5>
-        <div class="card bg-secondary">
-          <div class="card-body">
-            <h2>{{orderedWord}}</h2>
-            <h2>{{desorderedWord}}</h2>
-          </div>
+        <h5 class="text-white">Adivina la palabra</h5>
+        <div class="text-secondary pt-2">
+          Seleccione las letras en el orden <br>
+          que usted considere para armar la palabra
+        </div>
+        <div class="box-letters my-4 pb-2">
+          @for (item of orderedWord; track $index) { @if(validateWord[$index]){
+          <button disabled class="letter btn btn-outline-secondary">{{validateWord[$index]}}</button>
+          }@else {
+          <button disabled class="letter btn btn-outline-secondary">_</button>
+          } }
+        </div>
+        <div class="my-2">
+          @for (item of desorderedWord; track $index) {
+          <button (click)="addLetter(item, $index)" [disabled]="isDisabled[$index]"
+            class="letter btn btn-secondary">{{item}}</button>
+          }
+        </div>
+        }
+      </div>
+      <div class="card-footer">
+        <div class="mb-4">
+          <button class="btn btn-primary mx-3 px-4" (click)="randomWord()">Saltar</button>
+          <button class="btn btn-primary mx-3 px-4">Limpiar</button>
         </div>
         <div class="d-flex justify-content-between">
           <div>
-            <span>Tries:</span>
+            <small class="text-secondary">Tries(4/5):</small>
           </div>
-          <div>
-            <span>Mistakes:</span>
+          <div class="">
+            <small class="text-secondary">Mistakes:</small>
           </div>
         </div>
-        <div class="box-letters my-5">
-
-        </div>
-
-        <div>
-          <button class="btn btn-primary mx-3 px-4">Random</button>
-          <button class="btn btn-primary mx-3 px-4">Reset</button>
-        </div>
-        }
       </div>
     </div>
   </div>
