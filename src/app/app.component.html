@@ -1,6 +1,9 @@
 <div class="d-flex justify-content-center align-items-center vh-100 bg-primary-purple">
   <div class="text-center">
     <div class="card big-card p-4">
+      <div class="d-flex justify-content-end">
+        <i class="bi bi-lightbulb-fill lightbulb-on"></i>
+      </div>
       <div class="card-body">
         @if (orderedWord.length > 0) {
         <h5 class="text-white">Adivina la palabra</h5>
@@ -60,7 +63,6 @@
           <h1 class="modal-{{modal.type}}">{{modal.title}}</h1>
           <h5>{{modal.msg}}</h5>
         </div>
-
         }
       </div>
     </div>

@@ -36,3 +36,11 @@
 .emoji-response {
   font-size: 60px;
 }
+
+.lightbulb-on {
+  color: yellow;
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: 50%;
+  border: yellow solid 2px;
+}
