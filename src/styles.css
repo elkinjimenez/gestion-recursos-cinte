@@ -27,6 +27,14 @@
   color: red;
 }
 
+.modal-ANGRY {
+  color: orange;
+}
+
+.modal-INFO {
+  color: #0d6efd;
+}
+
 .btn-close {
   background-color: white;
   border-radius: 50%;
@@ -38,9 +46,34 @@
 }
 
 .lightbulb-on {
-  color: yellow;
+  color: #0d6efd;
   cursor: pointer;
   padding: 4px 8px;
   border-radius: 50%;
-  border: yellow solid 2px;
+  border: #0d6efd solid 2px;
+}
+
+.lightbulb-off {
+  color: gray;
+  padding: 4px 8px;
+  border-radius: 50%;
+  border: gray solid 2px;
+}
+
+.progress-clock {
+  animation: moveClockwise 5s linear infinite;
+}
+
+@keyframes moveClockwise {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.info {
+  cursor: pointer;
 }

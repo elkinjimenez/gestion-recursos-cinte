@@ -13,6 +13,8 @@ declare var $: any;
 })
 export class AppComponent {
 
+  oneHelp: boolean | null = true;
+
   isDisabled: boolean[] = [];
 
   orderedWord: string[] = [];
@@ -23,21 +25,28 @@ export class AppComponent {
 
   modal = {} as Modal;
 
+  score: number = 0;
+
   constructor(
     private wordService: WordService,
   ) {
     this.randomWord();
+    this.myScore();
   }
 
   ngOnInit() { }
+
+  private myScore() {
+    const score = localStorage.getItem(btoa('score'));
+    this.score = score ? parseInt(atob(score)) : 0;
+  }
 
   ngAfterViewInit() {
     this.getWordsApi();
   }
 
   public randomWord() {
-    this.isDisabled = [];
-    this.validateWord = [];
+    this.clean();
     this.wordService.wordListing = this.wordService.wordListing.sort(() => Math.random() - 0.5);
     this.orderedWord = this.wordService.wordListing[0].split('');
     this.wordService.wordListing.shift();
@@ -62,6 +71,7 @@ export class AppComponent {
   }
 
   public addLetter(letter: string, index: number) {
+    this.oneHelp = false;
     this.validateWord.push(letter);
     this.isDisabled[index] = true;
     this.validateGame();
@@ -70,11 +80,13 @@ export class AppComponent {
   public clean() {
     this.isDisabled = [];
     this.validateWord = [];
+    this.oneHelp = true;
   }
 
   validateGame() {
     if (this.validateWord.length == this.orderedWord.length) {
       if (this.validateWord.toString() == this.orderedWord.toString()) {
+        this.operationsScore(2, false);
         this.showModalResponse(
           this.wordService.listTitleVictory[Math.floor(Math.random() * this.wordService.listTitleVictory.length)],
           `${this.wordService.listMsgVictory[Math.floor(Math.random() * this.wordService.listMsgVictory.length)]} Sigue así...`,
@@ -99,6 +111,42 @@ export class AppComponent {
     $('#modalResponse').modal('show');
   }
 
+  public help() {
+    if (this.oneHelp) {
+      this.operationsScore(-1, false);
+      this.oneHelp = null;
+      const index = Math.floor(Math.random() * this.orderedWord.length);
+      this.validateWord[index] = this.orderedWord[index];
+      for (const key in this.orderedWord)
+        this.isDisabled[key] = true;
+      setTimeout(() => {
+        this.validateWord = [];
+        for (const key in this.orderedWord)
+          this.isDisabled[key] = false;
+        this.oneHelp = true;
+      }, 4000);
+    }
+  }
+
+  public operationsScore(value: number, isJump: boolean) {
+    this.score += value;
+    if (this.score < 0) {
+      isJump
+        ? this.showModalResponse('¡Uy!, ¿qué pasó?', 'Nos debes, ¿cuándo vas a pagar?', 'ANGRY')
+        : null;
+      this.score = 0;
+    }
+    localStorage.setItem(btoa('score'), btoa(String(this.score)));
+  }
+
+  public info() {
+    this.showModalResponse('El reglamento', `
+      🟢 +2 puntos por cada palabra correcta. <br>
+      🔴 - 1 punto por cada ayuda.<br>
+      🔴 - 1 punto por saltar la palabra.`,
+      'INFO');
+  }
+
 }
 
 interface Modal {
@@ -107,4 +155,4 @@ interface Modal {
   type: TYPE_MODAL;
 }
 
-type TYPE_MODAL = 'SUCCESS' | 'DANGER';
+type TYPE_MODAL = 'SUCCESS' | 'DANGER' | 'ANGRY' | 'INFO';

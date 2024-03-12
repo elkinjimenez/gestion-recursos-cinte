@@ -1,8 +1,14 @@
 <div class="d-flex justify-content-center align-items-center vh-100 bg-primary-purple">
   <div class="text-center">
     <div class="card big-card p-4">
-      <div class="d-flex justify-content-end">
-        <i class="bi bi-lightbulb-fill lightbulb-on"></i>
+      <div class="d-flex justify-content-between">
+        <i (click)="info()" class="bi bi-info-lg lightbulb-off info"></i>
+        @if (oneHelp==true) {
+        <i (click)="help()" class="bi bi-lightbulb-fill lightbulb-on"></i>
+        }@else if(oneHelp== false) {
+        <i class="bi bi-lightbulb-off lightbulb-off"></i>
+        }@else {
+        <i class="bi bi-hourglass lightbulb-off progress-clock"></i> }
       </div>
       <div class="card-body">
         @if (orderedWord.length > 0) {
@@ -28,16 +34,13 @@
       </div>
       <div class="card-footer">
         <div class="mb-4">
-          <button class="btn btn-primary mx-3 px-4" (click)="randomWord()">Saltar</button>
+          <button class="btn btn-primary mx-3 px-4" (click)="randomWord(); operationsScore(-1, true)">Saltar</button>
           <button class="btn btn-primary mx-3 px-4" (click)="clean()">Limpiar</button>
         </div>
-        <div class="d-flex justify-content-between">
-          <div>
-            <small class="text-secondary">Tries(4/5):</small>
-          </div>
-          <div class="">
-            <small class="text-secondary">Mistakes:</small>
-          </div>
+        <div class="d-flex justify-content-start">
+          <small class="text-secondary">
+            Puntuación: <span class="text-primary">{{score}} @if (score==1) {pt}@else{pts}.</span>
+          </small>
         </div>
       </div>
     </div>
@@ -58,10 +61,14 @@
             <span class="">🎉</span>
             }@else if (modal.type == 'DANGER') {
             <span class="emoji-response">😓</span>
+            }@else if(modal.type == 'ANGRY'){
+            <span class="emoji-response">😠</span>
+            }@else if (modal.type == 'INFO') {
+            <span class="emoji-response">💡</span>
             }
           </div>
           <h1 class="modal-{{modal.type}}">{{modal.title}}</h1>
-          <h5>{{modal.msg}}</h5>
+          <h5 [innerHTML]="modal.msg"></h5>
         </div>
         }
       </div>
