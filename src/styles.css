@@ -77,3 +77,7 @@
 .info {
   cursor: pointer;
 }
+
+.fa-lg {
+  font-size: 20px;
+}

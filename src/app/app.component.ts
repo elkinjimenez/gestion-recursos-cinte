@@ -30,7 +30,6 @@ export class AppComponent {
   constructor(
     private wordService: WordService,
   ) {
-    this.randomWord();
     this.myScore();
   }
 
@@ -39,6 +38,7 @@ export class AppComponent {
   private myScore() {
     const score = localStorage.getItem(btoa('score'));
     this.score = score ? parseInt(atob(score)) : 0;
+    this.randomWord();
   }
 
   ngAfterViewInit() {
@@ -50,14 +50,25 @@ export class AppComponent {
     this.wordService.wordListing = this.wordService.wordListing.sort(() => Math.random() - 0.5);
     this.orderedWord = this.wordService.wordListing[0].split('');
     this.wordService.wordListing.shift();
-    this.desorderedWord = [...this.orderedWord];
+    this.desorderedWord = [...this.capitalizeFirstLetters(this.orderedWord)];
     this.desorderedWord.sort(() => Math.random() - 0.5);
     if (this.wordService.wordListing.length < 10)
       this.getWordsApi();
   }
 
+  private capitalizeFirstLetters(word: string[]) {
+    const n = (this.score) ? ((this.score < 10) ? 1 : (this.score < 20) ? 2 : (this.score < 30) ? 3 : (this.score < 40) ? 4 : 0) : 0;
+    for (let index = 0; index < n; index++) {
+      if (word && word[index])
+        word[index] = word[index].toUpperCase()
+      else break;
+    }
+    return word;
+  }
+
   private getWordsApi() {
-    this.wordService.getWord().subscribe((data: string[]) => {
+    const length = this.score ? (this.score < 10) ? 4 : (this.score < 25) ? 5 : (this.score < 40) ? 6 : (this.score < 55) ? 7 : (this.score < 70) ? 8 : (this.score >= 80) ? 9 : 4 : 4;
+    this.wordService.getWord(length).subscribe((data: string[]) => {
       if (data && data.length > 0) {
         data.forEach(word => {
           if (/^[^\s.!#]{4,8}$/.test(word)) {
